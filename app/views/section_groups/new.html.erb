@@ -29,6 +29,10 @@
       background-color: #007bff;
       color: white;
     }
+    .readonly {
+      background-color: #f0f0f0; /* Fondo gris para campos de solo lectura */
+      cursor: not-allowed; /* Cambia el cursor para indicar que no es editable */
+    }
   </style>
 </head>
 <body>
@@ -60,27 +64,29 @@
 
       <div class="field">
         <%= form.label :h_start, 'Hora de inicio' %>
-        <%= form.text_field :h_start, value: @section_group.h_start, readonly: true %>
+        <%= form.text_field :h_start, value: @section_group.h_start, readonly: true, class: 'readonly' %>
       </div>
 
       <div class="field">
         <%= form.label :h_end, 'Hora de llegada' %>
-        <%= form.text_field :h_end, value: @section_group.h_end, readonly: true %>
+        <%= form.text_field :h_end, value: @section_group.h_end, readonly: true, class: 'readonly' %>
       </div>
 
       <div class="field">
         <%= form.label :day, 'Dia de la semana' %>
-        <%= form.text_field :day, value: @section_group.day, readonly: true %>
+        <%= form.text_field :day, value: @section_group.day, readonly: true, class: 'readonly' %>
       </div>
 
       <div class="field">
-        <%= form.label :starting_place_id, 'Punto de partida'  %>
-        <%= form.text_field :starting_place_id , value: @section_group.starting_place_id , readonly: true %>
+        <%= form.label :starting_place_id, 'Punto de partida' %>
+        <%= form.text_field :starting_place_name, value: Place.find(@section_group.starting_place_id).name, readonly: true, class: 'readonly' %>
+        <%= form.hidden_field :starting_place_id, value: @section_group.starting_place_id %>
       </div>
 
       <div class="field">
-        <%= form.label :ending_place_id, 'Destino'  %>
-        <%= form.text_field :ending_place_id  , value: @section_group.ending_place_id  , readonly: true %>
+        <%= form.label :ending_place_id, 'Destino' %>
+        <%= form.text_field :ending_place_name, value: Place.find(@section_group.ending_place_id).name, readonly: true, class: 'readonly' %>
+        <%= form.hidden_field :ending_place_id, value: @section_group.ending_place_id %>
       </div>
 
       <div class="actions">

@@ -1,6 +1,6 @@
 module ItinerariesHelper
     def day_options
-      ['lunes', 'martes', 'miércoles', 'jueves', 'viernes']
+      ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']
     end
 
     def status_options

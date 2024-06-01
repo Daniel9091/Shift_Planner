@@ -15,6 +15,7 @@ class SectionGroupsController < ApplicationController
   
     def new
       @section_group = SectionGroup.new
+      @places = Place.all
       if @itinerary
         @section_group.h_start = @itinerary.h_start
         @section_group.h_end = @itinerary.h_end
@@ -27,6 +28,7 @@ class SectionGroupsController < ApplicationController
     def create
       @section_group = SectionGroup.new(section_group_params)
       @section_group.user_id = current_user.id
+      @places = Place.all
   
       if @itinerary
         @section_group.h_start = @itinerary.h_start

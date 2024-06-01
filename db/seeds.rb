@@ -1,9 +1,9 @@
 # Limpia la base de datos
-User.destroy_all
-Place.destroy_all
-Itinerary.destroy_all
-SectionGroup.destroy_all
 Membership.destroy_all
+SectionGroup.destroy_all
+Itinerary.destroy_all
+Place.destroy_all
+User.destroy_all
 
 # Crear usuarios
 users = []
@@ -11,10 +11,17 @@ users = []
   users << User.create(
     name: "User #{i+1}",
     email: "user#{i+1}@example.com",
-    password: "123456",
+    password_digest: BCrypt::Password.create("123456"),
     phone: "123-456-789#{i}",
     description: "Description for user #{i+1}",
-    data: "nombre#{i};11.111.111-#{i};ncuenta#{i};tipocuenta#{i};banco#{i};email#{i}"
+    data_name: "nombre#{i}",
+    data_rut: "11.111.111-#{i}",
+    n_account: "ncuenta#{i}",
+    account_type: "tipocuenta#{i}",
+    banc: "banco#{i}",
+    data_email: "email#{i}",
+    driver_review: 1,
+    passenger_review: 1
   )
 end
 
@@ -39,7 +46,7 @@ end
 
   Itinerary.create(
     status: ["Piloto", "Pasajero"].sample,
-    day: ["lunes", "martes", "miércoles", "jueves", "viernes"].sample,
+    day: ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"].sample,
     h_start: "07:00",
     h_end: "08:30",
     is_active: [true, false].sample,
@@ -49,10 +56,18 @@ end
   )
 end
 
-
 # Crear grupos de secciones
 10.times do |i|
   SectionGroup.create(
-    n_seats: rand(1..10)
-)
+    n_seats: rand(1..10),
+    cost: rand(5..50),
+    h_start: "07:00",
+    h_end: "08:30",
+    day: ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"].sample,
+    description: "Description for section group #{i+1}",
+    user: users.sample,
+    starting_place: Place.all.sample,
+    ending_place: Place.all.sample,
+    itinerary: Itinerary.all.sample
+  )
 end

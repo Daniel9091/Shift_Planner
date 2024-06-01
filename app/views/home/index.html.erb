@@ -7,12 +7,19 @@
       margin-bottom: 100px;
       font-family: Arial, sans-serif;
     }
+    .profile-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
     .profile {
       background-color: #f4f4f4;
-      padding: 10px;
+      padding: 20px;
       margin: 20px;
       border-radius: 5px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      width: 100%;
     }
     .profile h1 {
       font-size: 24px;
@@ -21,6 +28,40 @@
     .profile p {
       font-size: 18px;
       margin: 5px 0;
+    }
+    .contact-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .description {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 20px;
+      background-color: #fff;
+    }
+    .description-title {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    .bank-info-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .bank-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .bank-info p {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      margin: 0;
+      background-color: #fff;
     }
     .itineraries {
       margin: 20px;
@@ -68,13 +109,10 @@
       border-color: #dc3545; /* Color del borde rojo */
       color: white; /* Color del texto blanco */
     }
-
     .custom-delete-btn:hover {
       background-color: #c82333; /* Color de fondo rojo oscuro al pasar el mouse */
       border-color: #bd2130; /* Color del borde rojo oscuro al pasar el mouse */
     }
-
-
     .form-container {
       width: 400px;
       margin: 0 auto;
@@ -124,26 +162,29 @@
 </head>
 <body>
   <% if @user %>
-    <div class="profile" id="perfil">
-      <h1>Perfil de Usuario</h1>
-      <p><strong>Nombre de usuario:</strong> <%= @user.name %></p>
-      <p><strong>Email:</strong> <%= @user.email %></p>
-      <p><strong>Teléfono:</strong> <%= @user.phone %></p>
-      <p><strong>Descripción:</strong> <%= @user.description %></p><br>
-      <p><strong>Datos Bancarios:</strong><br>
-        <% data_lines = @user.data.split(';') %>
-        <% name, rut, account_number, account_type, bank, mail = data_lines%>
-        <strong>  Nombre:</strong> <%= name %><br>
-        <strong>  RUT:</strong> <%= rut %><br>
-        <strong>  Tipo de Cuenta:</strong> <%= account_type %><br>
-        <strong>  Numero de Cuenta:</strong> <%= account_number %><br>
-        <strong>  Banco:</strong> <%= bank %><br>
-        <strong>  Email:</strong> <%= mail %><br>
-
-        <br>
-      </p>
-
-
+    <div class="profile-container">
+      <div class="profile" id="perfil">
+        <h1><%= @user.name %></h1>
+        <div class="contact-info">
+          <p><strong>Email:</strong> <%= @user.email %></p>
+          <p><strong>Teléfono:</strong> <%= @user.phone %></p>
+        </div>
+        <div class="description-title"><strong>Descripción:</strong></div>
+        <div class="description">
+          <%= @user.description %>
+        </div>
+        <div class="bank-info-title">Datos Bancarios:</div>
+        <div class="bank-info">
+          <% data_lines = @user.data.split(';') %>
+          <% name, rut, account_number, account_type, bank, mail = data_lines %>
+          <p><strong>Nombre:</strong> <%= name %></p>
+          <p><strong>RUT:</strong> <%= rut %></p>
+          <p><strong>Tipo de Cuenta:</strong> <%= account_type %></p>
+          <p><strong>Número de Cuenta:</strong> <%= account_number %></p>
+          <p><strong>Banco:</strong> <%= bank %></p>
+          <p><strong>Email:</strong> <%= mail %></p>
+        </div>
+      </div>
     </div>
 
     <div class="itineraries" id="viaje">
@@ -160,7 +201,6 @@
                   <%= button_to 'Cambiar estado', toggle_active_itinerary_path(itinerary), method: :post, class: 'btn btn-sm btn-secondary' %>
                 </div>
                 <%= link_to 'Eliminar', delete_itinerary_path(itinerary.id), method: :delete, data: { confirm: '¿Estás seguro?' }, class: 'btn btn-sm btn-danger custom-delete-btn' %>
-
               </div>
             </div>
             <table class="mt-2"> <!-- Ajustar la tabla dentro del contenedor de itinerario -->
@@ -190,7 +230,6 @@
             <% end %>
           </div>
         <% end %>
-        
       <% else %>
         <p>No tienes itinerarios registrados.</p>
       <% end %>

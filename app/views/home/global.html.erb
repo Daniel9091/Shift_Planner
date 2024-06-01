@@ -3,6 +3,10 @@
 <head>
   <title>Global</title>
   <style>
+    body {
+      margin-bottom: 100px; /* Agrega un margen inferior al cuerpo para evitar que el navbar se superponga */
+      font-family: Arial, sans-serif; /* Fuente base */
+    }
 
     .navbar {
       position: fixed;
@@ -14,22 +18,20 @@
       box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1); /* Agrega una sombra suave */
     }
 
-    body {
-      margin-bottom: 100px; /* Agrega un margen inferior al cuerpo para evitar que el navbar se superponga */
-    }
-
     .group-info {
       border-radius: 10px;
       border: 1px solid #ccc;
       padding: 10px;
+      margin-bottom: 10px; /* Añadir margen inferior para separar los grupos */
     }
-    
+
     /* Estilo adicional para las listas */
     .group-info ul {
       margin: 0; /* Elimina el margen predeterminado de las listas */
       padding: 0; /* Elimina el relleno predeterminado de las listas */
+      list-style-type: none; /* Elimina el estilo de lista predeterminado */
     }
-    
+
     .group-info li {
       margin-bottom: 5px; /* Ajusta el margen inferior de cada elemento de la lista */
     }
@@ -37,60 +39,96 @@
     /* Estilo adicional para el contenedor principal */
     .main-content {
       margin-bottom: 70px; /* Ajusta el margen inferior para dejar espacio al navbar */
+      padding: 20px; /* Añadir relleno para el contenedor principal */
+    }
+
+    /* Centrar el título y el botón en la parte superior derecha */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      flex-grow: 1;
+      text-align: center;
+      margin: 0;
+    }
+
+    .btn-fixed-width {
+      width: 220px; /* Ajusta este valor según sea necesario */
+      text-align: center;
+    }
+
+    /* Estilos para la sección "Eres piloto" */
+    .pilot-section {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 20px; /* Ajusta el margen inferior para separar las secciones */
+    }
+
+    /* Estilos para los detalles de cada grupo */
+    .group-details {
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 20px; /* Añadir margen inferior para separar cada grupo */
     }
   </style>
 </head>
 <body>
-
   <div class="main-content">
-    <h1>Global</h1>
+    <div class="header">
+      <h1>Busqueda Global</h1>
+      <%= link_to @button_text, global_path(mode: @new_mode), class: 'btn btn-primary btn-fixed-width' %>
+    </div>
 
     <p>Modo: <%= @current_mode %></p>
-    <%= link_to @button_text, global_path(mode: @new_mode), class: 'btn btn-primary' %>
 
     <% @active_itineraries.each do |itinerary| %>
       <div class="card mb-3">
         <div class="card-body">
-          <h2 class="card-title"><%= itinerary.day %> <%= itinerary.h_start %> -- <%= itinerary.h_end %></h2>
+          <h2 class="card-title"><%= itinerary.day %>: <%= itinerary.h_start %> -- <%= itinerary.h_end %></h2>
           <% if itinerary.status == 'Piloto' %>
-            <p class="card-text">Eres piloto.</p>
+            <div class="pilot-section">
+              <p class="card-text">Eres piloto.</p>
+            </div>
           <% else %>
             <% filtered_groups = filter_groups(itinerary, @current_mode) %>
             <% filtered_groups.each do |group| %>
-              <div class="group-info">
-                <ul>
-                  <li><strong>Día del Viaje:</strong> <%= group.day %></li>
-                  <li><strong>Hora de Salida:</strong> <%= group.h_start %></li>
-                  <li><strong>Hora de Llegada:</strong> <%= group.h_end %></li>
-                  <li><strong>Costo:</strong> <%= group.cost %></li>
-                  <li><strong>Lugar de Salida:</strong> <%= group.starting_place.name %></li>
-                  <li><strong>Lugar de Llegada:</strong> <%= group.ending_place.name %></li>
-                  <li><strong>Personas unidas al viaje:</strong> <%= group.users.count %> / <%= group.n_seats %></li>
-                  <% if group.users.include?(current_user) %>
-                    <li>Ya estás unido a este viaje.</li>
-                  <% elsif group.users.count >= group.n_seats.to_i %>
-                    <li>Este viaje está lleno.</li>
-                  <% else %>
-                    <li>
-                      <%= form_with url: join_group_path(group), method: :post, local: true do %>
-                        <%= hidden_field_tag :mode, @mode %>
-                        <%= submit_tag 'Unirse al viaje', class: 'btn btn-primary' %>
-                      <% end %>
-                    </li>
-                  <% end %>
-                </ul>
+              <div class="group-details">
+                <div class="group-info">
+                  <ul>
+                    <li><strong>Piloto:</strong> <%= group.user.name %></li>
+                    <li><strong>Costo:</strong> <%= group.cost %></li>
+                    <li><strong>Hora:</strong> <%= group.h_start %> -- <%= group.h_end %></li>
+                    <li><strong>Personas unidas al viaje:</strong> <%= group.users.count %> / <%= group.n_seats %></li>
+                    <% if group.users.include?(current_user) %>
+                      <li>Ya estás unido a este viaje.</li>
+                    <% elsif group.users.count >= group.n_seats.to_i %>
+                      <li>Este viaje está lleno.</li>
+                    <% else %>
+                      <li>
+                        <%= form_with url: join_group_path(group), method: :post, local: true do %>
+                          <%= hidden_field_tag :mode, @mode %>
+                          <%= submit_tag 'Unirse al viaje', class: 'btn btn-primary' %>
+                        <% end %>
+                      </li>
+                    <% end %>
+                  </ul>
+                </div>
               </div>
             <% end %>
           <% end %>
+          <h5><%= itinerary.starting_place.name %> -- <%= itinerary.ending_place.name %></h5>
         </div>
       </div>
     <% end %>
   </div>
 
-</body>
-
-<div class="navbar">
+  <div class="navbar">
     <%= render 'shared/navbar' %>
-</div>
-
+  </div>
+</body>
 </html>
