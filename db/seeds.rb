@@ -45,7 +45,7 @@ User.create(
 # Crear lugares
 uandes = Place.create(name: "Uandes")
 
-additional_places = ["Copec", "Mall", "Plaza", "Supermercado", "Parque"]
+additional_places = ["Lider Algarrobal"]
 
 additional_places.each do |place_name|
   Place.create(name: place_name)
