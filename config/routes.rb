@@ -18,4 +18,5 @@ Rails.application.routes.draw do
   get 'section_groups/:id/leave', to: 'section_groups#leave', as: 'leave_section_groups'
   resources :section_groups
 
+  get '/change_password', to: 'sessions#change_password'
 end
