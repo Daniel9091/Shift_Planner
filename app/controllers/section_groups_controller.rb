@@ -82,12 +82,14 @@ class SectionGroupsController < ApplicationController
   
     def leave
       if @section_group.users.include?(current_user)
+        SectionGroupHistory.create(section_group: @section_group, user: current_user, action: 'Salir')
         @section_group.users.delete(current_user)
         redirect_to root_path, notice: 'Has salido del viaje exitosamente.'
       else
         redirect_to root_path, alert: 'No eres miembro de este viaje.'
       end
     end
+
   
     private
   

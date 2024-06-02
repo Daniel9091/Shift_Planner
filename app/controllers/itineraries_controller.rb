@@ -2,6 +2,10 @@ class ItinerariesController < ApplicationController
     before_action :require_login
     before_action :set_itinerary, only: [:toggle_active]
 
+    def index
+      @itineraries = Itinerary.all
+      @itineraries = @itineraries.sort_by { |itinerary| [day_to_number(itinerary.day), itinerasry.h_start] }
+    end
 
     def new
       @itinerary = Itinerary.new
@@ -56,5 +60,18 @@ class ItinerariesController < ApplicationController
 
     def set_itinerary
       @itinerary = Itinerary.find(params[:id])
+    end
+
+    def day_to_number(day)
+      days = {
+        "Lunes" => 1,
+        "Martes" => 2,
+        "Miércoles" => 3,
+        "Jueves" => 4,
+        "Viernes" => 5,
+        "Sábado" => 6,
+        "Domingo" => 7
+      }
+      days[day]
     end
   end

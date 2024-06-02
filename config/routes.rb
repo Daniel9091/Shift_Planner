@@ -23,4 +23,6 @@ Rails.application.routes.draw do
   resources :section_groups
 
   get '/change_password', to: 'sessions#change_password'
+
+  resources :section_group_histories
 end
