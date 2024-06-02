@@ -11,6 +11,8 @@ class SectionGroupsController < ApplicationController
       @pilot = @section_group.user
       @members = @section_group.users
       @members_count = @section_group.users.count
+      @section_group = SectionGroup.find(params[:id])
+      @user = @section_group.user
     end
   
     def new
