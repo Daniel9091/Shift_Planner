@@ -25,6 +25,23 @@ users = []
   )
 end
 
+User.create(
+  name: "User x",
+  email: "userx@example.com",
+  password_digest: BCrypt::Password.create("123456"),
+  phone: "123-456-789",
+  description: "Description for user x",
+  data_name: "nombrex",
+  data_rut: "12.345.678",
+  n_account: "ncuentax",
+  account_type: "tipocuentax",
+  banc: "bancox",
+  data_email: "emailx",
+  driver_review: 1,
+  passenger_review: 1,
+  first_login: true
+)
+
 # Crear lugares
 uandes = Place.create(name: "Uandes")
 

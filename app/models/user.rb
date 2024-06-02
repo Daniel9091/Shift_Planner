@@ -11,8 +11,23 @@ class User < ApplicationRecord
     validates :name, presence: true
     validates :email, presence: true, uniqueness: true
     validates :phone, presence: true
-    validates :password_digest, presence: true
+    validates :password_digest, confirmation: true, presence: true, on: :create
     # Fuciones relevantes
+
+    def update_password
+        @user = User.find(params[:id])
+        if @user.update(user_params)
+          redirect_to root_path, notice: "Contraseña actualizada correctamente."
+        else
+          render :change_password
+        end
+    end
+
+    def user_params
+        params.require(:user).permit(:password_digest)
+    end
+
+    
     def average_driver_rating
         return 0 if n_driver_review.zero? driver_review.to_f / n_driver_review
     end
