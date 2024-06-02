@@ -175,14 +175,12 @@
         </div>
         <div class="bank-info-title">Datos Bancarios:</div>
         <div class="bank-info">
-          <% data_lines = @user.data.split(';') %>
-          <% name, rut, account_number, account_type, bank, mail = data_lines %>
-          <p><strong>Nombre:</strong> <%= name %></p>
-          <p><strong>RUT:</strong> <%= rut %></p>
-          <p><strong>Tipo de Cuenta:</strong> <%= account_type %></p>
-          <p><strong>Número de Cuenta:</strong> <%= account_number %></p>
-          <p><strong>Banco:</strong> <%= bank %></p>
-          <p><strong>Email:</strong> <%= mail %></p>
+          <p><strong>Nombre:</strong> <%= @user.data_name%></p>
+          <p><strong>RUT:</strong> <%= @user.data_rut %></p>
+          <p><strong>Tipo de Cuenta:</strong> <%= @user.account_type %></p>
+          <p><strong>Número de Cuenta:</strong> <%= @user.n_account %></p>
+          <p><strong>Banco:</strong> <%= @user.banc %></p>
+          <p><strong>Email:</strong> <%= @user.data_email %></p>
         </div>
       </div>
     </div>
