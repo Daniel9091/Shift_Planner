@@ -51,7 +51,7 @@
           </ul>
         </div>
       <% end %>
-      
+
       <%= form.hidden_field :itinerary_id, value: @itinerary.id %>
     
       <div class="form-group">
@@ -60,8 +60,8 @@
       </div>
 
       <div class="field">
-        <%= form.label :cost, 'Precio' %>
-        <%= form.text_field :cost %>
+        <%= form.label :cost, 'Precio (Por Pasajero)' %>
+        <%= form.number_field :cost, min: 1, id: 'cost_input' %>
       </div>
 
       <div class="field">

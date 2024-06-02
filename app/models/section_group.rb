@@ -9,6 +9,8 @@ class SectionGroup < ApplicationRecord
   validates :h_start, presence: true
   validates :h_end, presence: true
   validates :day, presence: true
+  validates :itinerary_id, presence: true
+  validates :cost, presence: true, numericality: { only_integer: true, greater_than: 0 }
   has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships
 end
