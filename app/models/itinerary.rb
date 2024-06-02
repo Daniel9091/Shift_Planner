@@ -9,4 +9,8 @@ class Itinerary < ApplicationRecord
   validates :day, presence: true
   validates :h_start, presence: true
   validates :h_end, presence: true
+
+  def has_section_groups?
+    section_groups.any?
+  end
 end

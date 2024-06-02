@@ -201,7 +201,7 @@
                 <%= link_to 'Eliminar', delete_itinerary_path(itinerary.id), method: :delete, data: { confirm: '¿Estás seguro?' }, class: 'btn btn-sm btn-danger custom-delete-btn' %>
               </div>
             </div>
-            <table class="mt-2"> <!-- Ajustar la tabla dentro del contenedor de itinerario -->
+            <table class="mt-2">
               <tr>
                 <th colspan="3"><%= itinerary.day %> - <%= itinerary.status %></th>
               </tr>
@@ -223,7 +223,11 @@
             </table>
             <% if itinerary.status == 'Piloto' %>
               <div class="new-section-group-btn mt-2">
-                <%= link_to 'Crear nuevo viaje', new_section_group_path(itinerary_id: itinerary.id), class: 'btn btn-secondary' %>
+                <% if itinerary.has_section_groups? %>
+                  <p>Ya tienes un viaje creado en este horario.</p>
+                <% else %>
+                  <%= link_to 'Crear nuevo viaje', new_section_group_path(itinerary_id: itinerary.id), class: 'btn btn-secondary' %>
+                <% end %>
               </div>
             <% end %>
           </div>
