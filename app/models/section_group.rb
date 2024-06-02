@@ -9,5 +9,7 @@ class SectionGroup < ApplicationRecord
   validates :h_start, presence: true
   validates :h_end, presence: true
   validates :day, presence: true
+  has_many :memberships, dependent: :destroy
+  has_many :users, through: :memberships
 end
   

@@ -56,18 +56,4 @@ end
   )
 end
 
-# Crear grupos de secciones
-10.times do |i|
-  SectionGroup.create(
-    n_seats: rand(1..10),
-    cost: rand(5..50),
-    h_start: "07:00",
-    h_end: "08:30",
-    day: ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"].sample,
-    description: "Description for section group #{i+1}",
-    user: users.sample,
-    starting_place: Place.all.sample,
-    ending_place: Place.all.sample,
-    itinerary: Itinerary.all.sample
-  )
-end
+
