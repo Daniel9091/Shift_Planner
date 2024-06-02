@@ -22,6 +22,7 @@ class SectionGroupsController < ApplicationController
         @section_group.starting_place_id = @itinerary.starting_place_id
         @section_group.ending_place_id = @itinerary.ending_place_id
         @section_group.day = @itinerary.day
+        @section_group.itinerary_id = @itinerary.id
       end
     end
   
@@ -36,6 +37,7 @@ class SectionGroupsController < ApplicationController
         @section_group.starting_place_id = @itinerary.starting_place_id
         @section_group.ending_place_id = @itinerary.ending_place_id
         @section_group.day = @itinerary.day
+        @section_group.itinerary_id = @itinerary.id
       end
   
       if @section_group.save
@@ -96,7 +98,7 @@ class SectionGroupsController < ApplicationController
     end
   
     def section_group_params
-      params.require(:section_group).permit(:n_seats, :cost, :h_start, :h_end, :day, :starting_place_id, :ending_place_id, :user_id)
+      params.require(:section_group).permit(:n_seats, :cost, :h_start, :h_end, :day, :starting_place_id, :ending_place_id, :user_id, :itinerary_id)
     end
   
     def require_login

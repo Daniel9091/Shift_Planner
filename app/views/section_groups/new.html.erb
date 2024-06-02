@@ -51,6 +51,8 @@
           </ul>
         </div>
       <% end %>
+      
+      <%= form.hidden_field :itinerary_id, value: @itinerary.id %>
     
       <div class="form-group">
         <%= form.label :n_seats, 'Numero de asientos' %>
