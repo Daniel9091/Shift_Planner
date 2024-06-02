@@ -62,11 +62,22 @@ class HomeController < ApplicationController
 
   def filter_groups(itinerary, current_mode)
     if current_mode == 'Llegada'
-      SectionGroup.where(h_end: itinerary.h_end, day: itinerary.day, starting_place_id: itinerary.starting_place_id, ending_place_id: itinerary.ending_place_id)
+      start_time = (Time.parse(itinerary.h_end) - 1.hour).strftime("%H:%M")
+      end_time = (Time.parse(itinerary.h_end) + 1.hour).strftime("%H:%M")
+      start_time = '00:00' if itinerary.h_end < '01:00'
+      end_time = '24:00' if itinerary.h_end > '23:00'
+      SectionGroup.where(day: itinerary.day, ending_place_id: itinerary.ending_place_id)
+                  .where("CAST(h_end AS TIME) BETWEEN ? AND ?", start_time, end_time)
     else
-      SectionGroup.where(h_start: itinerary.h_start, day: itinerary.day, starting_place_id: itinerary.starting_place_id, ending_place_id: itinerary.ending_place_id)
+      start_time = (Time.parse(itinerary.h_start) - 1.hour).strftime("%H:%M")
+      end_time = (Time.parse(itinerary.h_start) + 1.hour).strftime("%H:%M")
+      start_time = '00:00' if itinerary.h_start < '01:00'
+      end_time = '24:00' if itinerary.h_start > '23:00'
+      SectionGroup.where(day: itinerary.day, starting_place_id: itinerary.starting_place_id)
+                  .where("CAST(h_start AS TIME) BETWEEN ? AND ?", start_time, end_time)
     end
   end
+  
 
   def day_to_number(day)
     days = {
