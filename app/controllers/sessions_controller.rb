@@ -22,6 +22,7 @@ class SessionsController < ApplicationController
   end
 
   def change_password
-    # Aquí puedes implementar la lógica para cambiar la contraseña
+    @user = current_user
+    render :change_password
   end
 end
