@@ -25,4 +25,20 @@ class SessionsController < ApplicationController
     @user = current_user
     render :change_password
   end
+
+  def update_password
+    @user = current_user
+
+    if @user.update_with_password(user_params)
+      redirect_to root_path, notice: "Contraseña actualizada correctamente"
+    else
+      render :change_password
+    end
+  end
+
+  private
+
+  def user_params
+    params.require(:user).permit(:password, :password_confirmation, :current_password)
+  end
 end

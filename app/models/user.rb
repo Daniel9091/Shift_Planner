@@ -10,7 +10,8 @@ class User < ApplicationRecord
     validates :name, presence: true
     validates :email, presence: true, uniqueness: true
     validates :phone, presence: true
-    validates :password_digest, presence: true
+    validates :password, confirmation: true, presence: true, on: :create
+    validates :password_confirmation, presence: true, on: :create
     # Fuciones relevantes
     def average_driver_rating
         return 0 if n_driver_review.zero? driver_review.to_f / n_driver_review
