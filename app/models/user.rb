@@ -6,6 +6,7 @@ class User < ApplicationRecord
     has_many :section_groups, dependent: :destroy
     has_many :memberships, dependent: :destroy
     has_many :section_group, through: :memberships
+    has_many :section_group_histories
     # Validaciones
     validates :name, presence: true
     validates :email, presence: true, uniqueness: true

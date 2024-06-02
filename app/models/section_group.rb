@@ -14,6 +14,7 @@ class SectionGroup < ApplicationRecord
   validates :itinerary_id, presence: true
   validates :cost, presence: true, numericality: { only_integer: true, greater_than: 0 }
   has_many :memberships, dependent: :destroy
+  validates :travel_date, presence: true
   has_many :users, through: :memberships
 end
   
