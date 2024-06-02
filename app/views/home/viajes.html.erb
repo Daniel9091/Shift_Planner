@@ -15,6 +15,7 @@
                   <strong>Destino:</strong> <%= trip.ending_place.name %><br>
                   <strong>Hora de inicio:</strong> <%= trip.h_start %><br>
                   <strong>Hora de fin:</strong> <%= trip.h_end %>
+                  <strong>Fecha:</strong> <%= trip.travel_date.strftime("%d/%m/%Y") %>
                 </p>
               <% end %>
             </div>
@@ -40,6 +41,7 @@
                   <strong>Destino:</strong> <%= trip.ending_place.name %><br>
                   <strong>Hora de inicio:</strong> <%= trip.h_start %><br>
                   <strong>Hora de fin:</strong> <%= trip.h_end %>
+                  <strong>Fecha:</strong> <%= trip.travel_date %>
                 </p>
               <% end %>
             </div>

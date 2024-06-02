@@ -100,7 +100,7 @@ class SectionGroupsController < ApplicationController
     end
   
     def section_group_params
-      params.require(:section_group).permit(:n_seats, :cost, :h_start, :h_end, :day, :starting_place_id, :ending_place_id, :user_id, :itinerary_id)
+      params.require(:section_group).permit(:n_seats, :cost, :h_start, :h_end, :day, :starting_place_id, :ending_place_id, :user_id, :itinerary_id, :travel_date)
     end
   
     def require_login
