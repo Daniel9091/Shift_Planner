@@ -4,19 +4,26 @@ class HomeController < ApplicationController
 
   def index
     @user = current_user
-    @itineraries = @user ? @user.itineraries : []
+    if @user
+      @itineraries = @user.itineraries.to_a.sort_by { |itinerary| [day_to_number(itinerary.day), itinerary.h_start] }
+    else
+      @itineraries = []
+    end
   end
 
   def viajes
     @user = current_user
     @pilot_trips = SectionGroup.where(user_id: @user.id) || []
     @passenger_trips = SectionGroup.joins(:memberships).where(memberships: { user_id: @user.id }) || []
+  
+    @pilot_trips = @pilot_trips.sort_by { |trip| [day_to_number(trip.day), trip.h_start] }
+    @passenger_trips = @passenger_trips.sort_by { |trip| [day_to_number(trip.day), trip.h_start] }
   end
 
   def global
     @user = current_user
-    @active_itineraries = @user.itineraries.where(is_active: true)
-  
+    @active_itineraries = @user.itineraries.where(is_active: true).sort_by { |itinerary| [day_to_number(itinerary.day), itinerary.h_start] }
+    
     if params[:mode] == 'Llegada'
       @current_mode = 'Llegada'
       @new_mode = 'Salida'
@@ -30,11 +37,12 @@ class HomeController < ApplicationController
 
   def join_group
     @group = SectionGroup.find(params[:id])
-    if @group.users.count < @group.n_seats.to_i
-      @group.users << current_user
-      redirect_to global_path(mode: params[:mode]), notice: 'Te has unido al grupo con éxito.'
-    else
+    if @group.users.count >= @group.n_seats.to_i
       redirect_to global_path(mode: params[:mode]), alert: 'El grupo ya está lleno.'
+    else
+      @group.users << current_user
+      SectionGroupHistory.create(section_group: @group, user: current_user, action: 'Entrar')
+      redirect_to global_path(mode: params[:mode]), notice: 'Te has unido al grupo con éxito.'
     end
   end
 
@@ -54,9 +62,33 @@ class HomeController < ApplicationController
 
   def filter_groups(itinerary, current_mode)
     if current_mode == 'Llegada'
-      SectionGroup.where(h_end: itinerary.h_end, day: itinerary.day, starting_place_id: itinerary.starting_place_id, ending_place_id: itinerary.ending_place_id)
+      start_time = (Time.parse(itinerary.h_end) - 1.hour).strftime("%H:%M")
+      end_time = (Time.parse(itinerary.h_end) + 1.hour).strftime("%H:%M")
+      start_time = '00:00' if itinerary.h_end < '01:00'
+      end_time = '24:00' if itinerary.h_end > '23:00'
+      SectionGroup.where(day: itinerary.day, ending_place_id: itinerary.ending_place_id)
+                  .where("CAST(h_end AS TIME) BETWEEN ? AND ?", start_time, end_time)
     else
-      SectionGroup.where(h_start: itinerary.h_start, day: itinerary.day, starting_place_id: itinerary.starting_place_id, ending_place_id: itinerary.ending_place_id)
+      start_time = (Time.parse(itinerary.h_start) - 1.hour).strftime("%H:%M")
+      end_time = (Time.parse(itinerary.h_start) + 1.hour).strftime("%H:%M")
+      start_time = '00:00' if itinerary.h_start < '01:00'
+      end_time = '24:00' if itinerary.h_start > '23:00'
+      SectionGroup.where(day: itinerary.day, starting_place_id: itinerary.starting_place_id)
+                  .where("CAST(h_start AS TIME) BETWEEN ? AND ?", start_time, end_time)
     end
+  end
+  
+
+  def day_to_number(day)
+    days = {
+      "Lunes" => 1,
+      "Martes" => 2,
+      "Miércoles" => 3,
+      "Jueves" => 4,
+      "Viernes" => 5,
+      "Sábado" => 6,
+      "Domingo" => 7
+    }
+    days[day]
   end
 end

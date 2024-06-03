@@ -15,16 +15,16 @@
  */
 
  .bg-lightgray {
-    background-color: #dffcdd; /* Puedes ajustar este color al gris claro que prefieras */
-  }
+  background-color: #c6e2dab2; /* Puedes ajustar este color al gris claro que prefieras */
+}
 
-  .btn-custom {
-    background-color: #55ff88;
-    border-color: #1b487a;
-    /* Puedes ajustar otros estilos según sea necesario */
-  }
-  .btn-custom2 {
-    background-color: #dffcdd;
-    border-color: #dbffd7;
-    /* Puedes ajustar otros estilos según sea necesario */
-  }
+.btn-custom {
+  background-color: #55ecd8;
+  border-color: #1b487a;
+  /* Puedes ajustar otros estilos según sea necesario */
+}
+.btn-custom2 {
+  background-color: #fdb0b0;
+  border-color: #e48383;
+  /* Puedes ajustar otros estilos según sea necesario */
+}

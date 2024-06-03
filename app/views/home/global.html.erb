@@ -8,21 +8,12 @@
       font-family: Arial, sans-serif; /* Fuente base */
     }
 
-    .navbar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background-color: #f8f9fa; /* Cambia el color de fondo según tu diseño */
-      padding: 10px;
-      box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1); /* Agrega una sombra suave */
-    }
-
     .group-info {
       border-radius: 10px;
       border: 1px solid #ccc;
       padding: 10px;
       margin-bottom: 10px; /* Añadir margen inferior para separar los grupos */
+      background-color: #E5F2F7;
     }
 
     /* Estilo adicional para las listas */
@@ -104,6 +95,7 @@
                     <li><strong>Costo:</strong> <%= group.cost %></li>
                     <li><strong>Hora:</strong> <%= group.h_start %> -- <%= group.h_end %></li>
                     <li><strong>Personas unidas al viaje:</strong> <%= group.users.count %> / <%= group.n_seats %></li>
+                    <li><strong>Fecha:</strong> <%= group.travel_date.strftime("%d/%m/%Y") %> </li>
                     <% if group.users.include?(current_user) %>
                       <li>Ya estás unido a este viaje.</li>
                     <% elsif group.users.count >= group.n_seats.to_i %>

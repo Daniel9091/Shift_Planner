@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_01_174900) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_02_051601) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -45,6 +45,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_01_174900) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "section_group_histories", force: :cascade do |t|
+    t.bigint "section_group_id", null: false
+    t.bigint "user_id", null: false
+    t.string "action", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["section_group_id"], name: "index_section_group_histories_on_section_group_id"
+    t.index ["user_id"], name: "index_section_group_histories_on_user_id"
+  end
+
   create_table "section_groups", force: :cascade do |t|
     t.string "n_seats", null: false
     t.integer "cost", null: false
@@ -58,6 +68,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_01_174900) do
     t.bigint "starting_place_id", null: false
     t.bigint "ending_place_id", null: false
     t.bigint "itinerary_id", null: false
+    t.datetime "travel_date"
     t.index ["ending_place_id"], name: "index_section_groups_on_ending_place_id"
     t.index ["itinerary_id"], name: "index_section_groups_on_itinerary_id"
     t.index ["starting_place_id"], name: "index_section_groups_on_starting_place_id"
@@ -90,6 +101,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_01_174900) do
   add_foreign_key "itineraries", "users"
   add_foreign_key "memberships", "section_groups"
   add_foreign_key "memberships", "users"
+  add_foreign_key "section_group_histories", "section_groups"
+  add_foreign_key "section_group_histories", "users"
   add_foreign_key "section_groups", "itineraries"
   add_foreign_key "section_groups", "places", column: "ending_place_id"
   add_foreign_key "section_groups", "places", column: "starting_place_id"

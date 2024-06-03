@@ -1,20 +1,36 @@
+<style>
+  .no-viajes-color {
+    background-color: #FFFFFF; /* Color de fondo similar al de un alert azul */
+  }
+  
+  .no-viajes-color .card.mb-4 .card-body {
+    color: #0c5460; /* Color de texto similar al de un alert azul */
+  }
+</style>
+
 <h1 class="text-center my-4">Mis Viajes</h1>
 
-<div class="container">
+<% if @pilot_trips.empty? && @passenger_trips.empty? %>
+  <div class="container no-viajes-color">
+<% else %>
+  <div class="container">
+<% end %>
+
   <h2 class="mt-4">Como Piloto</h2>
   <% if @pilot_trips.any? %>
     <div class="row">
       <% @pilot_trips.each do |trip| %>
         <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
+          <div class="card mb-4 no-viajes-color">
+            <div class="card-body text-dark"> <!-- Ajuste del color del texto -->
               <%= link_to section_group_path(trip), class: 'text-decoration-none text-dark' do %>
                 <h5 class="card-title">Día: <%= trip.day %></h5>
                 <p class="card-text">
                   <strong>Inicio:</strong> <%= trip.starting_place.name %><br>
                   <strong>Destino:</strong> <%= trip.ending_place.name %><br>
                   <strong>Hora de inicio:</strong> <%= trip.h_start %><br>
-                  <strong>Hora de fin:</strong> <%= trip.h_end %>
+                  <strong>Hora de fin:</strong> <%= trip.h_end %><br>
+                  <strong>Fecha:</strong> <%= trip.travel_date.strftime("%d/%m/%Y") %>
                 </p>
               <% end %>
             </div>
@@ -31,15 +47,16 @@
     <div class="row">
       <% @passenger_trips.each do |trip| %>
         <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
+          <div class="card mb-4 no-viajes-color">
+            <div class="card-body text-dark"> <!-- Ajuste del color del texto -->
               <%= link_to section_group_path(trip), class: 'text-decoration-none text-dark' do %>
                 <h5 class="card-title">Día: <%= trip.day %></h5>
                 <p class="card-text">
                   <strong>Inicio:</strong> <%= trip.starting_place.name %><br>
                   <strong>Destino:</strong> <%= trip.ending_place.name %><br>
                   <strong>Hora de inicio:</strong> <%= trip.h_start %><br>
-                  <strong>Hora de fin:</strong> <%= trip.h_end %>
+                  <strong>Hora de fin:</strong> <%= trip.h_end %><br>
+                  <strong>Fecha:</strong> <%= trip.travel_date.strftime("%d/%m/%Y") %>
                 </p>
               <% end %>
             </div>
@@ -50,8 +67,8 @@
   <% else %>
     <div class="alert alert-info">No tienes viajes como pasajero.</div>
   <% end %>
-</div>
 
+</div>
 
 <%= render 'shared/navbar' %>
 

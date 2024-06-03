@@ -5,12 +5,13 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      padding-bottom: 80px;
     }
     .container {
       max-width: 600px; /* Ajusta el ancho máximo según sea necesario */
       margin: 0 auto;
     }
-    .field {
+    .field, .form-group {
       margin-bottom: 20px;
     }
     label {
@@ -18,7 +19,7 @@
       margin-bottom: 5px;
       display: block;
     }
-    input[type="text"], .btn {
+    input[type="text"], input[type="number"], input[type="date"], .btn {
       width: 100%;
       padding: 10px;
       border-radius: 4px;
@@ -34,6 +35,42 @@
       cursor: not-allowed; /* Cambia el cursor para indicar que no es editable */
     }
   </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const dayOfWeek = "<%= @section_group.day %>"; // Obtener el día de la semana del section_group
+      const travelDateInput = document.getElementById("travel_date_input");
+
+      const daysMap = {
+        'Sunday': 'Domingo',
+        'Monday': 'Lunes',
+        'Tuesday': 'Martes',
+        'Wednesday': 'Miércoles',
+        'Thursday': 'Jueves',
+        'Friday': 'Viernes',
+        'Saturday': 'Sábado'
+      };
+
+      const reverseDaysMap = {
+        'Domingo': 0,
+        'Lunes': 1,
+        'Martes': 2,
+        'Miércoles': 3,
+        'Jueves': 4,
+        'Viernes': 5,
+        'Sábado': 6
+      };
+
+      travelDateInput.addEventListener("input", function() {
+        const selectedDate = new Date(this.value);
+        const selectedDay = selectedDate.getUTCDay();
+
+        if (selectedDay !== reverseDaysMap[dayOfWeek]) {
+          alert(`Solo puedes seleccionar ${dayOfWeek}.`);
+          this.value = ''; // Limpiar el campo de entrada si el día no es válido
+        }
+      });
+    });
+  </script>
 </head>
 <body>
   <div class="container">
@@ -51,15 +88,22 @@
           </ul>
         </div>
       <% end %>
-    
+
+      <%= form.hidden_field :itinerary_id, value: @itinerary.id %>
+
       <div class="form-group">
         <%= form.label :n_seats, 'Numero de asientos' %>
         <%= form.select :n_seats, asiento_options, prompt: 'Selecciona la cantidad de asientos disponibles', class: 'form-control' %>
       </div>
 
       <div class="field">
-        <%= form.label :cost, 'Precio' %>
-        <%= form.text_field :cost %>
+        <%= form.label :cost, 'Precio (Por Pasajero)' %>
+        <%= form.number_field :cost, min: 1, id: 'cost_input' %>
+      </div>
+
+      <div class="field">
+        <%= form.label :travel_date, 'Fecha del calendario' %>
+        <%= form.date_field :travel_date, min: Date.today, id: 'travel_date_input', class: 'form-control' %>
       </div>
 
       <div class="field">

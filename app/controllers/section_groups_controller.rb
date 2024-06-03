@@ -11,6 +11,8 @@ class SectionGroupsController < ApplicationController
       @pilot = @section_group.user
       @members = @section_group.users
       @members_count = @section_group.users.count
+      @section_group = SectionGroup.find(params[:id])
+      @user = @section_group.user
     end
   
     def new
@@ -22,6 +24,7 @@ class SectionGroupsController < ApplicationController
         @section_group.starting_place_id = @itinerary.starting_place_id
         @section_group.ending_place_id = @itinerary.ending_place_id
         @section_group.day = @itinerary.day
+        @section_group.itinerary_id = @itinerary.id
       end
     end
   
@@ -36,6 +39,7 @@ class SectionGroupsController < ApplicationController
         @section_group.starting_place_id = @itinerary.starting_place_id
         @section_group.ending_place_id = @itinerary.ending_place_id
         @section_group.day = @itinerary.day
+        @section_group.itinerary_id = @itinerary.id
       end
   
       if @section_group.save
@@ -78,12 +82,14 @@ class SectionGroupsController < ApplicationController
   
     def leave
       if @section_group.users.include?(current_user)
+        SectionGroupHistory.create(section_group: @section_group, user: current_user, action: 'Salir')
         @section_group.users.delete(current_user)
         redirect_to root_path, notice: 'Has salido del viaje exitosamente.'
       else
         redirect_to root_path, alert: 'No eres miembro de este viaje.'
       end
     end
+
   
     private
   
@@ -96,7 +102,7 @@ class SectionGroupsController < ApplicationController
     end
   
     def section_group_params
-      params.require(:section_group).permit(:n_seats, :cost, :h_start, :h_end, :day, :starting_place_id, :ending_place_id, :user_id)
+      params.require(:section_group).permit(:n_seats, :cost, :h_start, :h_end, :day, :starting_place_id, :ending_place_id, :user_id, :itinerary_id, :travel_date)
     end
   
     def require_login
