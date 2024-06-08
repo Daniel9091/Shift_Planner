@@ -1,4 +1,5 @@
-
+<!DOCTYPE html>
+<html>
 <head>
   <title>Nuevo Grupo de Secciones</title>
   <style>
@@ -36,36 +37,63 @@
   </style>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      const dayOfWeek = "<%= @section_group.day %>"; // Obtener el día de la semana del section_group
-      const travelDateInput = document.getElementById("travel_date_input");
+      const form = document.querySelector("form");
+      form.addEventListener("submit", function(event) {
+        const requiredFields = ["section_group_n_seats", "section_group_cost", "travel_date_input"];
+        let valid = true;
+        let errorMessage = "Por favor, complete todos los campos.";
 
-      const daysMap = {
-        'Sunday': 'Domingo',
-        'Monday': 'Lunes',
-        'Tuesday': 'Martes',
-        'Wednesday': 'Miércoles',
-        'Thursday': 'Jueves',
-        'Friday': 'Viernes',
-        'Saturday': 'Sábado'
-      };
+        // Check required fields
+        requiredFields.forEach(function(fieldId) {
+          const field = document.getElementById(fieldId);
+          if (!field.value) {
+            valid = false;
+            field.style.borderColor = "red";
+          } else {
+            field.style.borderColor = "";
+          }
+        });
 
-      const reverseDaysMap = {
-        'Domingo': 0,
-        'Lunes': 1,
-        'Martes': 2,
-        'Miércoles': 3,
-        'Jueves': 4,
-        'Viernes': 5,
-        'Sábado': 6
-      };
+        // Check that travel date matches day of the week
+        const dayOfWeek = "<%= @section_group.day %>";
+        const travelDateInput = document.getElementById("travel_date_input");
 
-      travelDateInput.addEventListener("input", function() {
-        const selectedDate = new Date(this.value);
-        const selectedDay = selectedDate.getUTCDay();
+        const daysMap = {
+          'Sunday': 'Domingo',
+          'Monday': 'Lunes',
+          'Tuesday': 'Martes',
+          'Wednesday': 'Miércoles',
+          'Thursday': 'Jueves',
+          'Friday': 'Viernes',
+          'Saturday': 'Sábado'
+        };
 
-        if (selectedDay !== reverseDaysMap[dayOfWeek]) {
-          alert(`Solo puedes seleccionar ${dayOfWeek}.`);
-          this.value = ''; // Limpiar el campo de entrada si el día no es válido
+        const reverseDaysMap = {
+          'Domingo': 0,
+          'Lunes': 1,
+          'Martes': 2,
+          'Miércoles': 3,
+          'Jueves': 4,
+          'Viernes': 5,
+          'Sábado': 6
+        };
+
+        travelDateInput.addEventListener("input", function() {
+          const selectedDate = new Date(this.value);
+          const selectedDay = selectedDate.getUTCDay();
+
+          if (selectedDay !== reverseDaysMap[dayOfWeek]) {
+            valid = false;
+            this.style.borderColor = "red";
+            errorMessage = `Solo puedes seleccionar ${dayOfWeek}.`;
+          } else {
+            this.style.borderColor = "";
+          }
+        });
+
+        if (!valid) {
+          event.preventDefault();
+          alert(errorMessage);
         }
       });
     });
@@ -92,15 +120,13 @@
 
       <div class="form-group">
         <%= form.label :n_seats, 'Numero de asientos' %>
-        <%= form.select :n_seats, asiento_options, { prompt: 'Selecciona la cantidad de asientos disponibles' }, { class: 'form-control' } %>
+        <%= form.select :n_seats, asiento_options, { prompt: 'Selecciona la cantidad de asientos disponibles' }, { class: 'form-control', id: 'section_group_n_seats' } %>
       </div>
-
 
       <div class="field">
         <%= form.label :cost, 'Precio (Por Pasajero)' %>
-        <%= form.number_field :cost, min: 1, id: 'cost_input' %>
+        <%= form.number_field :cost, min: 1, id: 'section_group_cost' %>
       </div>
-
 
       <div class="form-group">
         <%= form.label :travel_date, 'Fecha del calendario', class: 'form-label' %>
@@ -146,4 +172,4 @@
     <%= yield %>
   </div>
 </body>
-
+</html>
