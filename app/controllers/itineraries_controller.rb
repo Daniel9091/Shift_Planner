@@ -32,9 +32,9 @@ class ItinerariesController < ApplicationController
     def delete
       @itinerary = Itinerary.find(params[:id])
       if @itinerary.destroy
-        flash[:success] = "Itinerario eliminado exitosamente."
+        flash[:notice] = "Itinerario eliminado exitosamente."
       else
-        flash[:error] = "Error al eliminar el itinerario."
+        flash[:alert] = "Error al eliminar el itinerario."
       end
       redirect_to root_path  
     end

@@ -73,9 +73,9 @@ class SectionGroupsController < ApplicationController
     def delete
       @section_group = SectionGroup.find(params[:id])
       if @section_group.destroy
-        flash[:success] = "Viaje eliminado exitosamente."
+        flash[:notice] = "Viaje eliminado exitosamente."
       else
-        flash[:error] = "Error al eliminar el viaje."
+        flash[:alert] = "Error al eliminar el viaje."
       end
       redirect_to root_path
     end
