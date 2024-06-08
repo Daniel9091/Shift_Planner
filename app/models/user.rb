@@ -9,7 +9,7 @@ class User < ApplicationRecord
     has_many :section_group_histories
     # Validaciones
     validates :name, presence: true
-    validates :email, presence: true, uniqueness: true
+    validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP, message: "no es válido" }
     validates :phone, presence: true
     validates :password_digest, confirmation: true, presence: true, on: :create
     # Fuciones relevantes

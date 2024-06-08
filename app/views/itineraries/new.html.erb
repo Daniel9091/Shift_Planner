@@ -8,7 +8,7 @@
       padding-bottom: 80px;
     }
     .container {
-      max-width: 600px; /* Ajusta el ancho máximo según sea necesario */
+      max-width: 600px;
       margin: 0 auto;
     }
     .form-group {
@@ -31,6 +31,58 @@
       color: white;
     }
   </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const form = document.querySelector("form");
+      form.addEventListener("submit", function(event) {
+        const requiredFields = ["itinerary_status", "itinerary_day", "itinerary_h_start", "itinerary_h_end", "itinerary_starting_place_id", "itinerary_ending_place_id"];
+        let valid = true;
+        let errorMessage = "Por favor, complete todos los campos.";
+
+        // Check required fields
+        requiredFields.forEach(function(fieldId) {
+          const field = document.getElementById(fieldId);
+          if (!field.value) {
+            valid = false;
+            field.style.borderColor = "red";
+          } else {
+            field.style.borderColor = "";
+          }
+        });
+
+        // Check that h_start and h_end are different
+        const hStart = document.getElementById("itinerary_h_start");
+        const hEnd = document.getElementById("itinerary_h_end");
+        if (hStart.value === hEnd.value) {
+          valid = false;
+          hStart.style.borderColor = "red";
+          hEnd.style.borderColor = "red";
+          errorMessage = "La hora de inicio y la hora de fin deben ser distintas.";
+        } else {
+          hStart.style.borderColor = "";
+          hEnd.style.borderColor = "";
+        }
+
+        // Check that starting_place_id and ending_place_id are different
+        const startingPlace = document.getElementById("itinerary_starting_place_id");
+        const endingPlace = document.getElementById("itinerary_ending_place_id");
+        if (startingPlace.value === endingPlace.value) {
+          valid = false;
+          startingPlace.style.borderColor = "red";
+          endingPlace.style.borderColor = "red";
+          errorMessage = "El lugar de inicio y el lugar de fin deben ser distintos.";
+        } else {
+          startingPlace.style.borderColor = "";
+          endingPlace.style.borderColor = "";
+        }
+
+        if (!valid) {
+          event.preventDefault();
+          alert(errorMessage);
+        }
+      });
+    });
+  </script>
 </head>
 <body>
   <div class="container">
@@ -38,40 +90,40 @@
 
     <%= form_with(model: @itinerary, local: true) do |form| %>
 
-        <div class="form-group">
-            <%= form.label :status, 'Categoria' %>
-            <%= form.select :status, status_options, prompt: 'Selecciona qué serás', class: 'form-control' %>
-        </div>
+      <div class="form-group">
+        <%= form.label :status, 'Categoría' %>
+        <%= form.select :status, status_options, prompt: 'Selecciona qué serás', class: 'form-control', id: 'itinerary_status' %>
+      </div>
 
-        <div class="form-group">
-            <%= form.label :day, 'Dia de la semana' %>
-            <%= form.select :day, day_options, prompt: 'Selecciona un día', class: 'form-control' %>
-        </div>
+      <div class="form-group">
+        <%= form.label :day, 'Día de la semana' %>
+        <%= form.select :day, day_options, prompt: 'Selecciona un día', class: 'form-control', id: 'itinerary_day' %>
+      </div>
 
-        <div class="form-group">
-            <%= form.label :h_start, 'Hora de inicio' %>
-            <%= form.select :h_start, hour_options, prompt: 'Selecciona una hora de inicio', class: 'form-control' %>
-        </div>
+      <div class="form-group">
+        <%= form.label :h_start, 'Hora de inicio' %>
+        <%= form.select :h_start, hour_options, prompt: 'Selecciona una hora de inicio', class: 'form-control', id: 'itinerary_h_start' %>
+      </div>
 
-        <div class="form-group">
-            <%= form.label :h_end, 'Hora de llegada' %>
-            <%= form.select :h_end, hour_options, prompt: 'Selecciona una hora de fin', class: 'form-control' %>
-        </div>
+      <div class="form-group">
+        <%= form.label :h_end, 'Hora de llegada' %>
+        <%= form.select :h_end, hour_options, prompt: 'Selecciona una hora de fin', class: 'form-control', id: 'itinerary_h_end' %>
+      </div>
 
-        <div class="form-group">
-          <%= form.label :starting_place_id, 'Lugar de inicio' %>
-          <%= form.collection_select :starting_place_id, @places, :id, :name, prompt: 'Selecciona el lugar de inicio', class: 'form-control' %>
-        </div>
+      <div class="form-group">
+        <%= form.label :starting_place_id, 'Lugar de inicio' %>
+        <%= form.collection_select :starting_place_id, @places, :id, :name, prompt: 'Selecciona el lugar de inicio', class: 'form-control', id: 'itinerary_starting_place_id' %>
+      </div>
 
-        <div class="form-group">
-          <%= form.label :ending_place_id, 'Lugar de fin' %>
-          <%= form.collection_select :ending_place_id, @places, :id, :name, prompt: 'Selecciona el lugar de fin', class: 'form-control' %>
-        </div>
+      <div class="form-group">
+        <%= form.label :ending_place_id, 'Lugar de fin' %>
+        <%= form.collection_select :ending_place_id, @places, :id, :name, prompt: 'Selecciona el lugar de fin', class: 'form-control', id: 'itinerary_ending_place_id' %>
+      </div>
 
-        <div class="form-group">
-          <%= form.submit 'Crear Itinerario', class: 'btn btn-primary' %>
-        </div>
-      <% end %>
+      <div class="form-group">
+        <%= form.submit 'Crear Itinerario', class: 'btn btn-primary' %>
+      </div>
+    <% end %>
   </div>
 
   <%= render 'shared/navbar' %>

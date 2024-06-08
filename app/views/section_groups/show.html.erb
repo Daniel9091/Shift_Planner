@@ -2,40 +2,75 @@
 <html>
 <head>
   <style>
-  .bank-info {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  .bank-info p {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 0;
-    background-color: #fff;
-  }
+    .bank-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .bank-info p {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      margin: 0;
+      background-color: #fff;
+    }
   </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const deleteButton = document.querySelector('a[data-method="delete"]');
+      const leaveButton = document.querySelector('a[data-method="leave"]');
+
+      function checkFields(event) {
+        const requiredFields = ["user_data_name", "user_data_rut", "user_account_type", "user_n_account", "user_banc", "user_data_email"];
+        let valid = true;
+        let errorMessage = "Por favor, complete todos los campos.";
+
+        requiredFields.forEach(function(fieldId) {
+          const field = document.getElementById(fieldId);
+          if (!field || !field.textContent.trim()) {
+            valid = false;
+            field.style.borderColor = "red";
+          } else {
+            field.style.borderColor = "";
+          }
+        });
+
+        if (!valid) {
+          event.preventDefault();
+          alert(errorMessage);
+        }
+      }
+
+      if (deleteButton) {
+        deleteButton.addEventListener("click", checkFields);
+      }
+
+      if (leaveButton) {
+        leaveButton.addEventListener("click", checkFields);
+      }
+    });
+  </script>
 </head>
 <body>
   <div class="container">
-  <div class="card my-4">
-    <div class="card-body">
-      <h1 class="card-title">Detalles del Viaje</h1>
-      <p class="card-text"><strong>Asientos:</strong> <%= @members_count %>/<%= @section_group.n_seats %></p>
-      <p class="card-text"><strong>Fecha del Viaje:</strong> <%= @section_group.travel_date.strftime("%d/%m/%Y") %></p>
-      <p class="card-text"><strong>Por favor transferir</strong> <%= @section_group.cost %> $</p>
-      <div class="bank-info-title"><strong>A la siguiente cuenta bancaria:</strong></div>
-      <div class="bank-info">
-        <p><strong>Nombre:</strong> <%= @user.data_name%></p>
-        <p><strong>RUT:</strong> <%= @user.data_rut %></p>
-        <p><strong>Tipo de Cuenta:</strong> <%= @user.account_type %></p>
-        <p><strong>Número de Cuenta:</strong> <%= @user.n_account %></p>
-        <p><strong>Banco:</strong> <%= @user.banc %></p>
-        <p><strong>Email:</strong> <%= @user.data_email %></p>
+    <div class="card my-4">
+      <div class="card-body">
+        <h1 class="card-title">Detalles del Viaje</h1>
+        <p class="card-text"><strong>Asientos:</strong> <%= @members_count %>/<%= @section_group.n_seats %></p>
+        <p class="card-text"><strong>Fecha del Viaje:</strong> <%= @section_group.travel_date.strftime("%d/%m/%Y") %></p>
+        <p class="card-text"><strong>Por favor transferir</strong> <%= @section_group.cost %> $</p>
+        <div class="bank-info-title"><strong>A la siguiente cuenta bancaria:</strong></div>
+        <div class="bank-info">
+          <p id="user_data_name"><strong>Nombre:</strong> <%= @user.data_name %></p>
+          <p id="user_data_rut"><strong>RUT:</strong> <%= @user.data_rut %></p>
+          <p id="user_account_type"><strong>Tipo de Cuenta:</strong> <%= @user.account_type %></p>
+          <p id="user_n_account"><strong>Número de Cuenta:</strong> <%= @user.n_account %></p>
+          <p id="user_banc"><strong>Banco:</strong> <%= @user.banc %></p>
+          <p id="user_data_email"><strong>Email:</strong> <%= @user.data_email %></p>
+        </div>
       </div>
     </div>
-  </div>
 
     <div class="card my-4">
       <div class="card-body">
@@ -81,11 +116,10 @@
     <% if @section_group.user_id == current_user.id %>
       <%= link_to 'Eliminar', delete_section_groups_path(@section_group.id), method: :delete, data: { confirm: '¿Estás seguro?' }, class: 'btn btn-sm btn-danger custom-delete-btn' %>
     <% elsif @members.include?(current_user) %>
-    <%= link_to 'Salir del Viaje', leave_section_groups_path(@section_group.id), method: :leave, data: { confirm: '¿Estás seguro?' }, class: 'btn btn-warning' %>
+      <%= link_to 'Salir del Viaje', leave_section_groups_path(@section_group.id), method: :leave, data: { confirm: '¿Estás seguro?' }, class: 'btn btn-warning' %>
     <% end %>
 
     <%= link_to 'Volver', request.referrer, class: 'btn btn-secondary' %>
-
   </div>
 </body>
 </html>
