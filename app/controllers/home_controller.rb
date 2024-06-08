@@ -68,6 +68,7 @@ class HomeController < ApplicationController
       end_time = '24:00' if itinerary.h_end > '23:00'
       SectionGroup.where(day: itinerary.day, ending_place_id: itinerary.ending_place_id)
                   .where("CAST(h_end AS TIME) BETWEEN ? AND ?", start_time, end_time)
+                  .where("travel_date >= ?", Date.today) 
     else
       start_time = (Time.parse(itinerary.h_start) - 1.hour).strftime("%H:%M")
       end_time = (Time.parse(itinerary.h_start) + 1.hour).strftime("%H:%M")
@@ -75,6 +76,7 @@ class HomeController < ApplicationController
       end_time = '24:00' if itinerary.h_start > '23:00'
       SectionGroup.where(day: itinerary.day, starting_place_id: itinerary.starting_place_id)
                   .where("CAST(h_start AS TIME) BETWEEN ? AND ?", start_time, end_time)
+                  .where("travel_date >= ?", Date.today) 
     end
   end
   
