@@ -1,10 +1,93 @@
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const phoneInput = document.getElementById("user_phone");
+    const phoneError = document.getElementById("phone-error");
+    const emailInput = document.getElementById("user_email");
+    const emailError = document.getElementById("email-error");
+    const passwordInput = document.getElementById("user_password");
+    const passwordConfirmationInput = document.getElementById("user_password_confirmation");
+    const submitButton = document.getElementById("submit-button");
+    const passwordMismatchError = document.getElementById("password-mismatch-error");
+
+    function validatePhoneNumber() {
+      const phoneNumber = phoneInput.value.trim();
+      if (phoneNumber.length !== 9 || !/^\d+$/.test(phoneNumber)) {
+        phoneError.textContent = "El teléfono debe tener 9 dígitos.";
+        phoneInput.classList.add("is-invalid");
+        return false;
+      } else {
+        phoneError.textContent = "";
+        phoneInput.classList.remove("is-invalid");
+        return true;
+      }
+    }
+
+    function validateEmail() {
+      const email = emailInput.value.trim();
+      if (!validateEmailFormat(email)) {
+        emailError.textContent = "Ingrese un correo electrónico válido.";
+        emailInput.classList.add("is-invalid");
+        return false;
+      } else {
+        emailError.textContent = "";
+        emailInput.classList.remove("is-invalid");
+        return true;
+      }
+    }
+
+    function validateEmailFormat(email) {
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return regex.test(email);
+    }
+
+    function validatePassword() {
+      if (passwordInput.value !== passwordConfirmationInput.value) {
+        passwordMismatchError.style.display = "block";
+        return false;
+      } else {
+        passwordMismatchError.style.display = "none";
+        return true;
+      }
+    }
+
+    function enableSubmitButton() {
+      submitButton.disabled = !(validatePhoneNumber() && validateEmail() && validatePassword());
+    }
+
+    phoneInput.addEventListener("input", function() {
+      validatePhoneNumber();
+      enableSubmitButton();
+    });
+
+    emailInput.addEventListener("input", function() {
+      validateEmail();
+      enableSubmitButton();
+    });
+
+    passwordInput.addEventListener("input", function() {
+      validatePassword();
+      enableSubmitButton();
+    });
+
+    passwordConfirmationInput.addEventListener("input", function() {
+      validatePassword();
+      enableSubmitButton();
+    });
+
+    validatePhoneNumber();
+    validateEmail();
+    validatePassword();
+    enableSubmitButton();
+  });
+</script>
+
 <div class="container">
   <h1>Registrarse</h1>
 
   <%= form_with model: @user, url: users_path, local: true do |form| %>
     <% if @user.errors.any? %>
       <div class="alert alert-danger">
-        <h4><%= pluralize(@user.errors.count, "error") %> impidió que el usuario se registrara:</h4>
+        <h4><%= pluralize(@user.errors.count, "") %> error/es al registrar usuario:</h4>
         <ul>
           <% @user.errors.full_messages.each do |message| %>
             <li><%= message %></li>
@@ -14,98 +97,108 @@
     <% end %>
 
     <div class="mb-3">
-      <%= form.label :name, class: "form-label" %>
-      <%= form.text_field :name, class: "form-control #{'is-invalid' if @user.errors[:name].any?}" %>
+      <%= form.label :name, "Nombre de usuario **", class: "form-label" %>
+      <%= form.text_field :name, class: "form-control #{'is-invalid' if @user.errors[:name].any?}", required: true %>
       <div class="invalid-feedback">
         <%= @user.errors[:name].first %>
       </div>
     </div>
-    
+
     <div class="mb-3">
-      <%= form.label :email, class: "form-label" %>
-      <%= form.email_field :email, class: "form-control #{'is-invalid' if @user.errors[:email].any?}", required: true %>
-      <div class="invalid-feedback">
+      <%= form.label :email, "Email **", class: "form-label" %>
+      <%= form.email_field :email, class: "form-control #{'is-invalid' if @user.errors[:email].any?}", required: true, id: "user_email" %>
+      <div id="email-error" class="invalid-feedback">
         <%= @user.errors[:email].first %>
       </div>
     </div>
-    
+
     <div class="mb-3">
-      <%= form.label :password, class: "form-label" %>
-      <%= form.password_field :password, class: "form-control #{'is-invalid' if @user.errors[:password].any?}", required: true %>
+      <%= form.label :password, 'Contraseña **', class: "form-label" %>
+      <%= form.password_field :password, autocomplete: "new-password", id: "user_password", class: "form-control #{'is-invalid' if @user.errors[:password].any?}", required: true %>
       <div class="invalid-feedback">
         <%= @user.errors[:password].first %>
       </div>
     </div>
-    
+
     <div class="mb-3">
-      <%= form.label :phone, class: "form-label" %>
-      <%= form.telephone_field :phone, class: "form-control #{'is-invalid' if @user.errors[:phone].any?}", required: true %>
-      <div class="invalid-feedback">
-        <%= @user.errors[:phone].first %>
-      </div>
+      <%= form.label :password_confirmation, 'Confirmar Contraseña **', class: "form-label" %>
+      <%= form.password_field :password_confirmation, autocomplete: "new-password", id: "user_password_confirmation", class: "form-control", required: true %>
     </div>
-    
+    <div id="password-mismatch-error" class="invalid-feedback" style="display: none;">Las contraseñas no coinciden</div>
+
     <div class="mb-3">
-      <%= form.label :description, class: "form-label" %>
-      <%= form.text_field :description, class: "form-control #{'is-invalid' if @user.errors[:description].any?}" %>
-      <div class="invalid-feedback">
-        <%= @user.errors[:description].first %>
+      <%= form.label :phone, "Teléfono **", class: "form-label" %>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">+56</span>
+        </div>
+        <%= form.telephone_field :phone, class: "form-control", required: true, id: "user_phone" %>
       </div>
+      <div id="phone-error" class="invalid-feedback"></div>
     </div>
-    
+
+    <div class="border p-3 mb-3">
+    <h2 class="mb-3">Datos Bancarios (Opcionales, pero recomendados si vas a ser piloto)</h2>
+
     <div class="mb-3">
-      <%= form.label :data_name, class: "form-label" %>
+      <%= form.label :data_name, "Nombre", class: "form-label" %>
       <%= form.text_field :data_name, class: "form-control #{'is-invalid' if @user.errors[:data_name].any?}" %>
       <div class="invalid-feedback">
         <%= @user.errors[:data_name].first %>
       </div>
     </div>
-    
+
     <div class="mb-3">
-      <%= form.label :data_rut, class: "form-label" %>
+      <%= form.label :data_rut, "Rut", class: "form-label" %>
       <%= form.text_field :data_rut, class: "form-control #{'is-invalid' if @user.errors[:data_rut].any?}" %>
       <div class="invalid-feedback">
         <%= @user.errors[:data_rut].first %>
       </div>
     </div>
-    
+
     <div class="mb-3">
-      <%= form.label :account_type, class: "form-label" %>
+      <%= form.label :account_type, "Tipo de cuenta", class: "form-label" %>
       <%= form.text_field :account_type, class: "form-control #{'is-invalid' if @user.errors[:account_type].any?}" %>
       <div class="invalid-feedback">
         <%= @user.errors[:account_type].first %>
       </div>
     </div>
-    
+
     <div class="mb-3">
-      <%= form.label :n_account, class: "form-label" %>
+      <%= form.label :n_account, "Número de cuenta", class: "form-label" %>
       <%= form.text_field :n_account, class: "form-control #{'is-invalid' if @user.errors[:n_account].any?}" %>
       <div class="invalid-feedback">
         <%= @user.errors[:n_account].first %>
       </div>
     </div>
-    
+
     <div class="mb-3">
-      <%= form.label :banc, class: "form-label" %>
+      <%= form.label :banc, "Banco", class: "form-label" %>
       <%= form.text_field :banc, class: "form-control #{'is-invalid' if @user.errors[:banc].any?}" %>
       <div class="invalid-feedback">
         <%= @user.errors[:banc].first %>
       </div>
     </div>
-    
+
     <div class="mb-3">
-      <%= form.label :data_email, class: "form-label" %>
+      <%= form.label :data_email, "Email Banco", class: "form-label" %>
       <%= form.email_field :data_email, class: "form-control #{'is-invalid' if @user.errors[:data_email].any?}" %>
       <div class="invalid-feedback">
         <%= @user.errors[:data_email].first %>
       </div>
     </div>
-    
-    <%= form.hidden_field :first_login, value: true %>
-    
-    
+
+  </div>
+
+
+    <%= form.hidden_field :first_login, value: false %>
+
     <div class="mb-3">
-      <%= form.submit "Registrarse", class: "btn btn-primary" %>
+      <%= form.submit "Registrarse", class: "btn btn-primary", id: "submit-button" %>
     </div>
   <% end %>
+
+  <div class="text-center">
+    ¿Ya tienes una cuenta? <%= link_to "Iniciar sesión aquí", login_path %>
+  </div>
 </div>
