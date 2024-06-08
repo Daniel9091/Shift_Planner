@@ -15,7 +15,7 @@ class SectionGroupHistoriesController < ApplicationController
     def create
       @section_group_history = SectionGroupHistory.new(section_group_history_params)
       if @section_group_history.save
-        redirect_to @section_group_history, notice: 'Historial de grupo de secciones creado exitosamente.'
+        redirect_to @section_group_history
       else
         render :new
       end

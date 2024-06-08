@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
       if user.first_login?
         redirect_to change_password_path, notice: "¡Bienvenido! Por favor, cambia tu contraseña."
       else
-        redirect_to root_path, notice: "Inicio de sesión exitoso"
+        redirect_to root_path
       end
     else
       flash.now[:alert] = "Credenciales inválidas"
