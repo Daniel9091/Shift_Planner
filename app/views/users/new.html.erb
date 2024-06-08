@@ -39,10 +39,31 @@
     </div>
     
     <div class="mb-3">
-      <%= form.label :data, class: "form-label" %>
-      <%= form.text_field :data, class: "form-control" %>
+      <%= form.label :data_name, class: "form-label" %>
+      <%= form.text_field :data_name, class: "form-control" %>
     </div>
     
+    <div class="mb-3">
+      <%= form.label :data_rut, class: "form-label" %>
+      <%= form.text_field :data_rut, class: "form-control" %>
+    </div>
+    <div class="mb-3">
+      <%= form.label :account_type, class: "form-label" %>
+      <%= form.text_field :account_type, class: "form-control" %>
+    </div>
+    <div class="mb-3">
+      <%= form.label :n_account, class: "form-label" %>
+      <%= form.text_field :n_account, class: "form-control" %>
+    </div>
+    <div class="mb-3">
+      <%= form.label :banc, class: "form-label" %>
+      <%= form.text_field :banc, class: "form-control" %>
+    </div>
+    <div class="mb-3">
+      <%= form.label :data_email, class: "form-label" %>
+      <%= form.text_field :data_email, class: "form-control" %>
+    </div>
+    <%= form.hidden_field :first_login, value: true %>
     <div class="mb-3">
       <%= form.submit "Registrarse", class: "btn btn-primary" %>
     </div>

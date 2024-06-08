@@ -9,68 +9,52 @@ User.destroy_all
 users = []
 5.times do |i|
   users << User.create(
-    name: "User #{i+1}",
-    email: "user#{i+1}@example.com",
+    name: "Admin #{i+1}",
+    email: "Admin#{i+1}@example.com",
     password_digest: BCrypt::Password.create("123456"),
     phone: "123-456-789#{i}",
-    description: "Description for user #{i+1}",
-    data_name: "nombre#{i}",
+    description: "Description for Admin #{i+1}",
+    data_name: "Admin#{i}",
     data_rut: "11.111.111-#{i}",
     n_account: "ncuenta#{i}",
     account_type: "tipocuenta#{i}",
     banc: "banco#{i}",
-    data_email: "email#{i}",
+    data_email: "Admin#{i+1}@example.com",
     driver_review: 1,
     passenger_review: 1
   )
 end
 
-User.create(
-  name: "User x",
-  email: "userx@example.com",
-  password_digest: BCrypt::Password.create("123456"),
-  phone: "123-456-789",
-  description: "Description for user x",
-  data_name: "nombrex",
-  data_rut: "12.345.678",
-  n_account: "ncuentax",
-  account_type: "tipocuentax",
-  banc: "bancox",
-  data_email: "emailx",
-  driver_review: 1,
-  passenger_review: 1,
-  first_login: true
-)
-
 # Crear lugares
 uandes = Place.create(name: "Uandes")
+lider = Place.create(name: "Lider Algarrobal")
 
-additional_places = ["Copec", "Mall", "Plaza", "Supermercado", "Parque"]
-
-additional_places.each do |place_name|
-  Place.create(name: place_name)
-end
+# Agregare mas lugares
+# additional_places = ["Lider Algarrobal"]
+# additional_places.each do |place_name|
+#   Place.create(name: place_name)
+# end
 
 # Crear itinerarios
-10.times do |i|
-  if i.even?
-    starting_place = uandes
-    ending_place = (Place.where.not(id: uandes.id)).sample
-  else
-    starting_place = (Place.where.not(id: uandes.id)).sample
-    ending_place = uandes
-  end
+# 10.times do |i|
+#   if i.even?
+#     starting_place = uandes
+#     ending_place = (Place.where.not(id: lider.id)).sample
+#   else
+#     starting_place = (Place.where.not(id: uandes.id)).sample
+#     ending_place = uandes
+#   end
 
-  Itinerary.create(
-    status: ["Piloto", "Pasajero"].sample,
-    day: ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"].sample,
-    h_start: "07:00",
-    h_end: "08:30",
-    is_active: [true, false].sample,
-    user: users.sample,
-    starting_place: starting_place,
-    ending_place: ending_place
-  )
-end
+#   Itinerary.create(
+#     status: ["Piloto", "Pasajero"].sample,
+#     day: ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"].sample,
+#     h_start: "07:00",
+#     h_end: "08:30",
+#     is_active: [true, false].sample,
+#     user: users.sample,
+#     starting_place: starting_place,
+#     ending_place: ending_place
+#   )
+# end
 
 

@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html>
+
 <head>
   <title>Nuevo Grupo de Secciones</title>
   <style>
     body {
       font-family: Arial, sans-serif;
+      padding-bottom: 80px;
     }
     .container {
       max-width: 600px; /* Ajusta el ancho máximo según sea necesario */
@@ -92,17 +92,19 @@
 
       <div class="form-group">
         <%= form.label :n_seats, 'Numero de asientos' %>
-        <%= form.select :n_seats, asiento_options, prompt: 'Selecciona la cantidad de asientos disponibles', class: 'form-control' %>
+        <%= form.select :n_seats, asiento_options, { prompt: 'Selecciona la cantidad de asientos disponibles' }, { class: 'form-control' } %>
       </div>
+
 
       <div class="field">
         <%= form.label :cost, 'Precio (Por Pasajero)' %>
         <%= form.number_field :cost, min: 1, id: 'cost_input' %>
       </div>
 
-      <div class="field">
-        <%= form.label :travel_date, 'Fecha del calendario' %>
-        <%= form.date_field :travel_date, min: Date.today, id: 'travel_date_input', class: 'form-control' %>
+
+      <div class="form-group">
+        <%= form.label :travel_date, 'Fecha del calendario', class: 'form-label' %>
+        <%= form.text_field :travel_date, id: 'travel_date_input', class: 'form-control' %>
       </div>
 
       <div class="field">
@@ -144,4 +146,4 @@
     <%= yield %>
   </div>
 </body>
-</html>
+

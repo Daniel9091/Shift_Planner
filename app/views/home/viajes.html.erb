@@ -1,6 +1,6 @@
 <style>
   .no-viajes-color {
-    background-color: #d1ecf1; /* Color de fondo similar al de un alert azul */
+    background-color: #FFFFFF; /* Color de fondo similar al de un alert azul */
   }
   
   .no-viajes-color .card.mb-4 .card-body {
@@ -11,7 +11,7 @@
 <h1 class="text-center my-4">Mis Viajes</h1>
 
 <% if @pilot_trips.empty? && @passenger_trips.empty? %>
-  <div class="container no-viajes-color">
+  <div class="container ">
 <% else %>
   <div class="container">
 <% end %>
@@ -22,7 +22,7 @@
       <% @pilot_trips.each do |trip| %>
         <div class="col-md-4">
           <div class="card mb-4 no-viajes-color">
-            <div class="card-body text-dark"> <!-- Ajuste del color del texto -->
+            <div class="card-body text-dark"> 
               <%= link_to section_group_path(trip), class: 'text-decoration-none text-dark' do %>
                 <h5 class="card-title">Día: <%= trip.day %></h5>
                 <p class="card-text">
@@ -48,7 +48,7 @@
       <% @passenger_trips.each do |trip| %>
         <div class="col-md-4">
           <div class="card mb-4 no-viajes-color">
-            <div class="card-body text-dark"> <!-- Ajuste del color del texto -->
+            <div class="card-body text-dark"> 
               <%= link_to section_group_path(trip), class: 'text-decoration-none text-dark' do %>
                 <h5 class="card-title">Día: <%= trip.day %></h5>
                 <p class="card-text">

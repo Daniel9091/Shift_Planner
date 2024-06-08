@@ -32,8 +32,8 @@ class UsersController < ApplicationController
     private
   
     def user_params
-      params.require(:user).permit(:name, :email, :password, :phone, :description, :data)
-    end
+      params.require(:user).permit(:name, :email, :password, :phone, :description, :data_name, :data_rut, :account_type, :n_account, :banc, :data_email, :first_login)
+    end    
 
     def day_to_number(day)
       days = {
