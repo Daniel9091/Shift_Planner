@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  
+  
     def new
       @user = User.new
     end
@@ -29,7 +31,27 @@ class UsersController < ApplicationController
         render :change_password
       end
     end
-  
+
+    #############
+    def edit_profile
+      @user = current_user
+      puts ("hola########################################################################################################################################3")
+
+    end
+
+    def update_profile
+      puts("hoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooool")
+      @user = current_user
+      if @user.update(user_params)
+        redirect_to root_path, notice: "Perfil actualizado correctamente."
+      else
+        render :edit_profile
+      end
+    end
+    #############3
+
+
+
     private
   
     def user_params

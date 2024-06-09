@@ -185,6 +185,18 @@
       </div>
     </div>
 
+
+    <%= link_to "Cambiar Contraseña", change_password_path, class: "btn btn-primary" %>
+
+
+    <%= link_to 'Editar Perfil', edit_profile_path(current_user), class: 'btn btn-primary' %>
+
+
+
+
+    
+
+
     <div class="itineraries" id="viaje">
       <h2>Itinerarios</h2>
       <% if @itineraries.any? %>

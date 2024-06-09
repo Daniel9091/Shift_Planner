@@ -9,7 +9,12 @@ Rails.application.routes.draw do
   get 'viaje', to: 'home#viajes'
   get 'global', to: 'home#global'
   post 'join_group/:id', to: 'home#join_group', as: 'join_group'
+  # para editar el usuraio (mala practica revisar para versiones posteriores)
+
+  get 'perfil/edit', to: 'users#edit_profile', as: 'edit_profile'
+  patch 'perfil/update', to: 'users#update_profile', as: 'update_profile'
   
+  # para editar la contraseña (mala practica, editar para versiones posteriores)
   resources :users, only: [:edit, :update] do
     patch 'update_password', on: :member
   end

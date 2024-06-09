@@ -1,0 +1,65 @@
+<!-- app/views/users/edit.html.erb -->
+
+<h1>Editar Perfil</h1>
+
+<%= form_with(model: @user, url: update_profile_path(@user), method: :patch) do |form| %>
+  <% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+      <ul>
+        <% @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :phone %>
+    <%= form.text_field :phone %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_area :description %>
+  </div>
+
+  <div class="field">
+    <%= form.label :data_name %>
+    <%= form.text_field :data_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :data_rut %>
+    <%= form.text_field :data_rut %>
+  </div>
+
+  <div class="field">
+    <%= form.label :account_type %>
+    <%= form.text_field :account_type %>
+  </div>
+
+  <div class="field">
+    <%= form.label :n_account %>
+    <%= form.text_field :n_account %>
+  </div>
+
+  <div class="field">
+    <%= form.label :banc %>
+    <%= form.text_field :banc %>
+  </div>
+
+  <div class="field">
+    <%= form.label :data_email %>
+    <%= form.text_field :data_email %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Guardar cambios" %>
+  </div>
+<% end %>
