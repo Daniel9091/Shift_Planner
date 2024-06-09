@@ -32,15 +32,13 @@ class UsersController < ApplicationController
       end
     end
 
-    #############
+
     def edit_profile
       @user = current_user
-      puts ("hola########################################################################################################################################3")
 
     end
 
     def update_profile
-      puts("hoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooool")
       @user = current_user
       if @user.update(user_params)
         redirect_to root_path, notice: "Perfil actualizado correctamente."
@@ -48,7 +46,6 @@ class UsersController < ApplicationController
         render :edit_profile
       end
     end
-    #############3
 
 
 

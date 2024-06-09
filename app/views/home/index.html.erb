@@ -1,4 +1,8 @@
+<!DOCTYPE html>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css" rel="stylesheet">
+<html lang="es">
 <head>
+  <meta charset="UTF-8">
   <title>Perfil de Usuario</title>
   <style>
     body {
@@ -18,6 +22,7 @@
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       max-width: 600px;
       width: 100%;
+      position: relative;
     }
     .profile h1 {
       font-size: 24px;
@@ -32,16 +37,16 @@
       justify-content: space-between;
       margin-bottom: 20px;
     }
+    .description-title {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
     .description {
       border: 1px solid #ddd;
       border-radius: 5px;
       padding: 10px;
       margin-bottom: 20px;
       background-color: #fff;
-    }
-    .description-title {
-      font-size: 14px;
-      margin-bottom: 5px;
     }
     .bank-info-title {
       font-size: 18px;
@@ -61,6 +66,14 @@
       margin: 0;
       background-color: #fff;
     }
+    .action-buttons {
+      top: 0;
+      right: 0;
+      position: absolute;
+      display: flex;
+      gap: 10px;
+    }
+
     .itineraries {
       margin: 20px;
     }
@@ -158,12 +171,28 @@
     .active-status.inactive {
       background-color: #dc3545;
     }
+    .btn-customper {
+      background-color: #ccc; 
+      color: #333; 
+      border-color: #bbb; 
+    }
+
+    .btn-customper:hover {
+      background-color: #bbb; 
+      color: #333; 
+    }
   </style>
 </head>
 <body>
   <% if @user %>
     <div class="profile-container">
       <div class="profile" id="perfil">
+        <div class="action-buttons">
+          <%= link_to "Cambiar Contraseña", change_password_path, class: "btn btn-customper" %>
+          <%= link_to edit_profile_path(current_user), class: 'btn btn-customper' do %>
+            <i class="bi bi-pencil-fill"></i> 
+          <% end %>
+        </div>
         <h1><%= @user.name %></h1>
         <div class="contact-info">
           <p><strong>Email:</strong> <%= @user.email %></p>
@@ -184,18 +213,6 @@
         </div>
       </div>
     </div>
-
-
-    <%= link_to "Cambiar Contraseña", change_password_path, class: "btn btn-primary" %>
-
-
-    <%= link_to 'Editar Perfil', edit_profile_path(current_user), class: 'btn btn-primary' %>
-
-
-
-
-    
-
 
     <div class="itineraries" id="viaje">
       <h2>Itinerarios</h2>
@@ -260,6 +277,5 @@
   <div class="container mt-4">
     <%= yield %>
   </div>
-
 </body>
 </html>
