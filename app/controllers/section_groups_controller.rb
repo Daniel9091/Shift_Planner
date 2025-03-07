@@ -1,7 +1,6 @@
 class SectionGroupsController < ApplicationController
     before_action :require_login
     before_action :set_section_group, only: [:show, :edit, :update, :destroy, :delete, :leave]
-    before_action :set_itinerary, only: [:new, :create]
   
     def index
       @section_groups = SectionGroup.all
@@ -18,6 +17,9 @@ class SectionGroupsController < ApplicationController
     def new
       @section_group = SectionGroup.new
       @places = Place.all
+      @itinerary = Itinerary.find_by(id: params[:itinerary_id])
+      puts @itinerary
+    
       if @itinerary
         @section_group.h_start = @itinerary.h_start
         @section_group.h_end = @itinerary.h_end
@@ -26,27 +28,31 @@ class SectionGroupsController < ApplicationController
         @section_group.day = @itinerary.day
       end
     end
+    
   
     def create
       @section_group = SectionGroup.new(section_group_params)
       @section_group.user_id = current_user.id
       @places = Place.all
-  
-      if @itinerary
-        @section_group.h_start = @itinerary.h_start
-        @section_group.h_end = @itinerary.h_end
-        @section_group.starting_place_id = @itinerary.starting_place_id
-        @section_group.ending_place_id = @itinerary.ending_place_id
-        @section_group.day = @itinerary.day
+      
+      puts "holaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      if params[:itinerary_id].present?
+        puts "entre%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55"
+        itinerary = Itinerary.find(params[:itinerary_id])
+        @section_group.h_start = itinerary.h_start
+        @section_group.h_end = itinerary.h_end
+        @section_group.starting_place_id = itinerary.starting_place_id
+        @section_group.ending_place_id = itinerary.ending_place_id
+        @section_group.day = itinerary.day
       end
-  
+    
       if @section_group.save
-        redirect_to viaje_path
-        flash[:notice] = 'Viaje creado exitosamente.'
+        redirect_to viaje_path, notice: 'Viaje creado exitosamente.'
       else
         render :new
       end
     end
+    
   
     def edit
     end

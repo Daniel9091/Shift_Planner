@@ -17,6 +17,7 @@
 <% end %>
 
   <h2 class="mt-4">Como Piloto</h2>
+  <%= link_to 'Crear nuevo viaje espontaneo', new_section_group_path(), class: 'btn btn-secondary' %>
   <% if @pilot_trips.any? %>
     <div class="row">
       <% @pilot_trips.each do |trip| %>

@@ -97,6 +97,12 @@
         }
       });
     });
+
+
+
+
+
+
   </script>
 </head>
 <body>
@@ -116,7 +122,10 @@
         </div>
       <% end %>
 
-      <%= form.hidden_field :itinerary_id, value: @itinerary.id %>
+      <% if @itinerary %>
+        <%= form.hidden_field :itinerary_id, value: @itinerary.id %>
+      <% end %>
+
 
       <div class="form-group">
         <%= form.label :n_seats, 'Numero de asientos' %>
@@ -133,32 +142,63 @@
         <%= form.text_field :travel_date, id: 'travel_date_input', class: 'form-control' %>
       </div>
 
-      <div class="field">
-        <%= form.label :h_start, 'Hora de inicio' %>
-        <%= form.text_field :h_start, value: @section_group.h_start, readonly: true, class: 'readonly' %>
-      </div>
+      <% if @itinerary %>
+        <div class="field">
+          <%= form.label :h_start, 'Hora de inicio' %>
+          <%= form.text_field :h_start, value: @section_group.h_start, readonly: true, class: 'readonly' %>
+        </div>
+      
+        <div class="field">
+          <%= form.label :h_end, 'Hora de llegada' %>
+          <%= form.text_field :h_end, value: @section_group.h_end, readonly: true, class: 'readonly' %>
+        </div>
 
-      <div class="field">
-        <%= form.label :h_end, 'Hora de llegada' %>
-        <%= form.text_field :h_end, value: @section_group.h_end, readonly: true, class: 'readonly' %>
-      </div>
+        <div class="field">
+          <%= form.label :day, 'Dia de la semana' %>
+          <%= form.text_field :day, value: @section_group.day, readonly: true, class: 'readonly' %>
+        </div>
 
-      <div class="field">
-        <%= form.label :day, 'Dia de la semana' %>
-        <%= form.text_field :day, value: @section_group.day, readonly: true, class: 'readonly' %>
-      </div>
+        <div class="field">
+          <%= form.label :starting_place_id, 'Punto de partida' %>
+          <%= form.text_field :starting_place_name, value: Place.find(@section_group.starting_place_id).name, readonly: true, class: 'readonly' %>
+          <%= form.hidden_field :starting_place_id, value: @section_group.starting_place_id %>
+        </div>
+      
+        <div class="field">
+          <%= form.label :ending_place_id, 'Destino' %>
+          <%= form.text_field :ending_place_name, value: Place.find(@section_group.ending_place_id).name, readonly: true, class: 'readonly' %>
+          <%= form.hidden_field :ending_place_id, value: @section_group.ending_place_id %>
+        </div>
+      <% else %>
 
-      <div class="field">
-        <%= form.label :starting_place_id, 'Punto de partida' %>
-        <%= form.text_field :starting_place_name, value: Place.find(@section_group.starting_place_id).name, readonly: true, class: 'readonly' %>
-        <%= form.hidden_field :starting_place_id, value: @section_group.starting_place_id %>
-      </div>
+        <div class="field">
+          <%= form.label :h_start, 'Hora de inicio' %>
+          <%= form.text_field :h_start, value: @section_group.h_start, class: 'form-control' %>
+        </div>
 
-      <div class="field">
-        <%= form.label :ending_place_id, 'Destino' %>
-        <%= form.text_field :ending_place_name, value: Place.find(@section_group.ending_place_id).name, readonly: true, class: 'readonly' %>
-        <%= form.hidden_field :ending_place_id, value: @section_group.ending_place_id %>
-      </div>
+        <div class="field">
+          <%= form.label :h_end, 'Hora de llegada' %>
+          <%= form.text_field :h_end, value: @section_group.h_end, class: 'form-control' %>
+        </div>
+
+        <div class="field">
+          <%= form.label :day, 'Día de la semana' %>
+          <%= form.text_field :day, value: @section_group.day, class: 'form-control' %>
+        </div>
+
+        <div class="field">
+          <%= form.label :starting_place_id, 'Punto de partida' %>
+          <%= form.collection_select :starting_place_id, @places, :id, :name, { prompt: 'Seleccione un lugar' }, { class: 'form-control' } %>
+        </div>
+
+        <div class="field">
+          <%= form.label :ending_place_id, 'Destino' %>
+          <%= form.collection_select :ending_place_id, @places, :id, :name, { prompt: 'Seleccione un destino' }, { class: 'form-control' } %>
+        </div>
+
+
+      <% end %>
+
 
       <div class="actions">
         <%= form.submit 'Crear Viaje', class: 'btn btn-primary' %>
