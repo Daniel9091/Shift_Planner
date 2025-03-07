@@ -67,10 +67,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_051601) do
     t.bigint "user_id", null: false
     t.bigint "starting_place_id", null: false
     t.bigint "ending_place_id", null: false
-    t.bigint "itinerary_id", null: false
     t.datetime "travel_date"
     t.index ["ending_place_id"], name: "index_section_groups_on_ending_place_id"
-    t.index ["itinerary_id"], name: "index_section_groups_on_itinerary_id"
     t.index ["starting_place_id"], name: "index_section_groups_on_starting_place_id"
     t.index ["user_id"], name: "index_section_groups_on_user_id"
   end
@@ -103,7 +101,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_051601) do
   add_foreign_key "memberships", "users"
   add_foreign_key "section_group_histories", "section_groups"
   add_foreign_key "section_group_histories", "users"
-  add_foreign_key "section_groups", "itineraries"
   add_foreign_key "section_groups", "places", column: "ending_place_id"
   add_foreign_key "section_groups", "places", column: "starting_place_id"
   add_foreign_key "section_groups", "users"

@@ -215,7 +215,7 @@
     </div>
 
     <div class="itineraries" id="viaje">
-      <h2>Itinerarios</h2>
+      <h2>Viajes frecuentes</h2>
       <% if @itineraries.any? %>
         <% @itineraries.each do |itinerary| %>
           <div class="itinerary">
@@ -252,11 +252,7 @@
             </table>
             <% if itinerary.status == 'Piloto' %>
               <div class="new-section-group-btn mt-2">
-                <% if itinerary.has_section_groups? %>
-                  <p>Ya tienes un viaje creado en este horario.</p>
-                <% else %>
-                  <%= link_to 'Crear nuevo viaje', new_section_group_path(itinerary_id: itinerary.id), class: 'btn btn-secondary' %>
-                <% end %>
+                <%= link_to 'Crear nuevo viaje', new_section_group_path(itinerary_id: itinerary.id), class: 'btn btn-secondary' %>
               </div>
             <% end %>
           </div>
@@ -265,7 +261,7 @@
         <p>No tienes itinerarios registrados.</p>
       <% end %>
       <div class="new-itinerary-btn">
-        <%= link_to 'Crear nuevo itinerario', new_itinerary_path, class: 'btn btn-primary' %>
+        <%= link_to 'Crear nuevo viaje frecuente', new_itinerary_path, class: 'btn btn-primary' %>
       </div>
     </div>
   <% else %>
