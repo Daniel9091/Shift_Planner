@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Nuevo Itinerario</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <title>Nuevo Viaje</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -82,17 +84,26 @@
         }
       });
     });
+
+    document.addEventListener("DOMContentLoaded", function() {
+      flatpickr(".timepicker", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "h:i K", // Formato 12 horas con AM/PM
+        time_24hr: false
+        });
+      });
   </script>
 </head>
 <body>
   <div class="container">
-    <h1 class="mt-4">Crear Nuevo Itinerario</h1>
+    <h1 class="mt-4">Crear Nuevo Viaje</h1>
 
     <%= form_with(model: @itinerary, local: true) do |form| %>
 
       <div class="form-group">
         <%= form.label :status, 'Categoría' %>
-        <%= form.select :status, status_options, prompt: 'Selecciona qué serás', class: 'form-control', id: 'itinerary_status' %>
+        <%= form.select :status, status_options, prompt: 'Selecciona una categoría', class: 'form-control', id: 'itinerary_status' %>
       </div>
 
       <div class="form-group">
@@ -100,15 +111,11 @@
         <%= form.select :day, day_options, prompt: 'Selecciona un día', class: 'form-control', id: 'itinerary_day' %>
       </div>
 
-      <div class="form-group">
-        <%= form.label :h_start, 'Hora de inicio' %>
-        <%= form.select :h_start, hour_options, prompt: 'Selecciona una hora de inicio', class: 'form-control', id: 'itinerary_h_start' %>
-      </div>
+      <%= form.label :h_start, 'Hora de inicio' %>
+      <%= form.text_field :h_start, value: @itinerary.h_start, class: 'form-control timepicker' %>
 
-      <div class="form-group">
-        <%= form.label :h_end, 'Hora de llegada' %>
-        <%= form.select :h_end, hour_options, prompt: 'Selecciona una hora de fin', class: 'form-control', id: 'itinerary_h_end' %>
-      </div>
+      <%= form.label :h_end, 'Hora de llegada' %>
+      <%= form.text_field :h_end, value: @itinerary.h_end, class: 'form-control timepicker' %>
 
       <div class="form-group">
         <%= form.label :starting_place_id, 'Lugar de inicio' %>
@@ -121,7 +128,7 @@
       </div>
 
       <div class="form-group">
-        <%= form.submit 'Crear Itinerario', class: 'btn btn-primary' %>
+        <%= form.submit 'Crear Viaje', class: 'btn btn-primary' %>
       </div>
     <% end %>
   </div>

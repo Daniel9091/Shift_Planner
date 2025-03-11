@@ -28,6 +28,10 @@ end
 # Crear lugares
 uandes = Place.create(name: "Uandes")
 lider = Place.create(name: "Lider Algarrobal")
+copec = Place.create(name: "Copec Rotonda Chicureo")
+adolfo = Place.create(name: "Adolfo Ibáñez")
+
+
 
 # Agregare mas lugares
 # additional_places = ["Lider Algarrobal"]

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
   <title>Nuevo Grupo de Secciones</title>
   <style>
     body {
@@ -98,10 +101,64 @@
       });
     });
 
+  document.addEventListener("DOMContentLoaded", function() {
+    const costSelect = document.getElementById("cost-select");
+    const customCostContainer = document.getElementById("custom-cost-container");
+    const customCostInput = document.getElementById("custom-cost-input");
 
+    costSelect.addEventListener("change", function() {
+      if (this.value === "otro") {
+        customCostContainer.style.display = "block";
+        customCostInput.value = "";
+        customCostInput.focus();
+      } else {
+        customCostContainer.style.display = "none";
+        customCostInput.value = this.value;
+      }
+    });
+  });
 
+  document.addEventListener("DOMContentLoaded", function() {
+    flatpickr(".timepicker", {
+      enableTime: true,
+      noCalendar: true,
+      dateFormat: "h:i K", // Formato 12 horas con AM/PM
+      time_24hr: false
+    });
+  });
 
+  document.addEventListener("DOMContentLoaded", function() {
+    var travelDateInput = document.getElementById("travel_date_input");
+    var dayInput = document.getElementById("day_input");
 
+    travelDateInput.addEventListener("change", function() {
+      var dateValue = this.value;
+      if (dateValue) {
+        var dateObj = new Date(dateValue);
+        if (!isNaN(dateObj)) {
+          var dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+          var dayIndex = dateObj.getDay();
+          <% if @itinerary %>
+            // Si existe un itinerario, se espera un día específico
+            var expectedDayStr = "<%= @section_group.day %>"; // Por ejemplo, "Lunes"
+            var expectedDayIndex = dayNames.indexOf(expectedDayStr);
+            if (dayIndex !== expectedDayIndex) {
+              alert("La fecha seleccionada no corresponde al día " + expectedDayStr + ". Por favor seleccione una fecha válida.");
+              // Limpiamos los campos para forzar una nueva selección
+              this.value = "";
+              dayInput.value = "";
+            } else {
+              // Si coincide, autocompleta el campo "Día de la semana"
+              dayInput.value = dayNames[dayIndex];
+            }
+          <% else %>
+            // En caso de creación excepcional, simplemente autocompleta el campo
+            dayInput.value = dayNames[dayIndex];
+          <% end %>
+        }
+      }
+    });
+  });
 
   </script>
 </head>
@@ -134,7 +191,14 @@
 
       <div class="field">
         <%= form.label :cost, 'Precio (Por Pasajero)' %>
-        <%= form.number_field :cost, min: 1, id: 'section_group_cost' %>
+        <%= form.select :cost, [["1000", 1000], ["1500", 1500], ["2000", 2000], ["2500", 2500], ["Otro...", "otro"]], 
+            { prompt: 'Seleccione un precio' }, 
+            { class: 'form-control', id: 'cost-select' } %>
+
+        <!-- Input oculto para monto personalizado -->
+        <div id="custom-cost-container" style="display: none; margin-top: 10px;">
+          <%= form.number_field :cost, min: 1, class: "form-control", id: "custom-cost-input", placeholder: "Ingrese su monto" %>
+        </div>
       </div>
 
       <div class="form-group">
@@ -143,6 +207,7 @@
       </div>
 
       <% if @itinerary %>
+      <%# ITINERARIO PREVIO %>
         <div class="field">
           <%= form.label :h_start, 'Hora de inicio' %>
           <%= form.text_field :h_start, value: @section_group.h_start, readonly: true, class: 'readonly' %>
@@ -169,22 +234,21 @@
           <%= form.text_field :ending_place_name, value: Place.find(@section_group.ending_place_id).name, readonly: true, class: 'readonly' %>
           <%= form.hidden_field :ending_place_id, value: @section_group.ending_place_id %>
         </div>
-      <% else %>
+      <% else %> 
+      <%# SIN ITINERARIO PREVIO %>
 
-        <div class="field">
-          <%= form.label :h_start, 'Hora de inicio' %>
-          <%= form.text_field :h_start, value: @section_group.h_start, class: 'form-control' %>
-        </div>
+        <%= form.label :h_start, 'Hora de inicio' %>
+        <%= form.text_field :h_start, value: @section_group.h_start, class: 'form-control timepicker' %>
 
-        <div class="field">
-          <%= form.label :h_end, 'Hora de llegada' %>
-          <%= form.text_field :h_end, value: @section_group.h_end, class: 'form-control' %>
-        </div>
+        <%= form.label :h_end, 'Hora de llegada' %>
+        <%= form.text_field :h_end, value: @section_group.h_end, class: 'form-control timepicker' %>
 
-        <div class="field">
-          <%= form.label :day, 'Día de la semana' %>
-          <%= form.text_field :day, value: @section_group.day, class: 'form-control' %>
-        </div>
+
+      <div class="field">
+        <%= form.label :day, 'Día de la semana' %>
+        <%= form.text_field :day, value: @section_group.day, class: 'form-control', id: 'day_input', readonly: true %>
+      </div>
+
 
         <div class="field">
           <%= form.label :starting_place_id, 'Punto de partida' %>
