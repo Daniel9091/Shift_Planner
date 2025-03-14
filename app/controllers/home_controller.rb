@@ -22,17 +22,28 @@ class HomeController < ApplicationController
 
   def global
     @user = current_user
-    @active_itineraries = @user.itineraries.where(is_active: true).sort_by { |itinerary| [day_to_number(itinerary.day), itinerary.h_start] }
+
+    @section_groups_by_day = SectionGroup.where(filter_params)
+                                         .order(:travel_date, :h_start)
+                                         .group_by(&:day)
     
-    if params[:mode] == 'Llegada'
-      @current_mode = 'Llegada'
-      @new_mode = 'Salida'
-      @button_text = 'Cambiar a modo Salida'
-    else
-      @current_mode = 'Salida'
-      @new_mode = 'Llegada'
-      @button_text = 'Cambiar a modo Llegada'
-    end
+    @days_of_week = %w[Lunes Martes Miércoles Jueves Viernes Sábado Domingo]
+
+
+ 
+
+
+    # @active_itineraries = @user.itineraries.where(is_active: true).sort_by { |itinerary| [day_to_number(itinerary.day), itinerary.h_start] }
+    
+    # if params[:mode] == 'Llegada'
+    #   @current_mode = 'Llegada'
+    #   @new_mode = 'Salida'
+    #   @button_text = 'Cambiar a modo Salida'
+    # else
+    #   @current_mode = 'Salida'
+    #   @new_mode = 'Llegada'
+    #   @button_text = 'Cambiar a modo Llegada'
+    # end
   end
 
   def join_group
@@ -93,4 +104,10 @@ class HomeController < ApplicationController
     }
     days[day]
   end
+  def filter_params
+    params.permit(:day, :h_start, :h_end, :starting_place_id, :ending_place_id, :travel_date).to_h.compact_blank
+  end
+
+   
+
 end

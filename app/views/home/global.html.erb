@@ -4,116 +4,90 @@
   <title>Global</title>
   <style>
     body {
-      margin-bottom: 100px; /* Agrega un margen inferior al cuerpo para evitar que el navbar se superponga */
-      font-family: Arial, sans-serif; /* Fuente base */
+      margin-bottom: 100px;
+      font-family: Arial, sans-serif;
     }
 
-    .group-info {
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin-bottom: 10px; /* Añadir margen inferior para separar los grupos */
-      background-color: #E5F2F7;
-    }
-
-    /* Estilo adicional para las listas */
-    .group-info ul {
-      margin: 0; /* Elimina el margen predeterminado de las listas */
-      padding: 0; /* Elimina el relleno predeterminado de las listas */
-      list-style-type: none; /* Elimina el estilo de lista predeterminado */
-    }
-
-    .group-info li {
-      margin-bottom: 5px; /* Ajusta el margen inferior de cada elemento de la lista */
-    }
-
-    /* Estilo adicional para el contenedor principal */
-    .main-content {
-      margin-bottom: 70px; /* Ajusta el margen inferior para dejar espacio al navbar */
-      padding: 20px; /* Añadir relleno para el contenedor principal */
-    }
-
-    /* Centrar el título y el botón en la parte superior derecha */
-    .header {
+    .section-groups {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
+      flex-direction: column;
+      gap: 20px;
     }
 
-    .header h1 {
-      flex-grow: 1;
-      text-align: center;
-      margin: 0;
-    }
-
-    .btn-fixed-width {
-      width: 220px; /* Ajusta este valor según sea necesario */
-      text-align: center;
-    }
-
-    /* Estilos para la sección "Eres piloto" */
-    .pilot-section {
-      border: 1px solid #ccc;
+    .day-box {
+      background: #f8f9fa;
+      padding: 15px;
       border-radius: 10px;
-      padding: 10px;
-      margin-bottom: 20px; /* Ajusta el margen inferior para separar las secciones */
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+      overflow-x: auto;
+      white-space: nowrap;
     }
 
-    /* Estilos para los detalles de cada grupo */
-    .group-details {
-      border-radius: 10px;
+    .day-box h2 {
+      text-align: center;
+      color: #007bff;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 5px;
+    }
+
+    .groups {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+
+    .section-group {
+      background: white;
       padding: 10px;
-      margin-bottom: 20px; /* Añadir margen inferior para separar cada grupo */
+      border-radius: 8px;
+      box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+      min-width: 250px;
+      max-width: 400px;
+      flex: 0 0 auto;
+    }
+
+    .section-group p {
+      margin: 5px 0;
+    }
+
+    .section-group strong {
+      color: #343a40;
     }
   </style>
 </head>
 <body>
-  <div class="main-content">
-    <div class="header">
-      <h1>Busqueda Global</h1>
-      <%= link_to @button_text, global_path(mode: @new_mode), class: 'btn btn-primary btn-fixed-width' %>
-    </div>
-
-    <p>Modo: <%= @current_mode %></p>
-
-    <% @active_itineraries.each do |itinerary| %>
-      <div class="card mb-3">
-        <div class="card-body">
-          <h2 class="card-title"><%= itinerary.day %>: <%= itinerary.h_start %> -- <%= itinerary.h_end %></h2>
-          <% if itinerary.status == 'Piloto' %>
-            <div class="pilot-section">
-              <p class="card-text">Eres piloto.</p>
-            </div>
-          <% else %>
-            <% filtered_groups = filter_groups(itinerary, @current_mode) %>
-            <% filtered_groups.each do |group| %>
-              <div class="group-details">
-                <div class="group-info">
-                  <ul>
-                    <li><strong>Piloto:</strong> <%= group.user.name %></li>
-                    <li><strong>Costo:</strong> <%= group.cost %></li>
-                    <li><strong>Hora:</strong> <%= group.h_start %> -- <%= group.h_end %></li>
-                    <li><strong>Personas unidas al viaje:</strong> <%= group.users.count %> / <%= group.n_seats %></li>
-                    <li><strong>Fecha:</strong> <%= group.travel_date.strftime("%d/%m/%Y") %> </li>
-                    <% if group.users.include?(current_user) %>
-                      <li>Ya estás unido a este viaje.</li>
-                    <% elsif group.users.count >= group.n_seats.to_i %>
-                      <li>Este viaje está lleno.</li>
-                    <% else %>
-                      <li>
-                        <%= form_with url: join_group_path(group), method: :post, local: true do %>
-                          <%= hidden_field_tag :mode, @mode %>
-                          <%= submit_tag 'Unirse al viaje', class: 'btn btn-primary' %>
-                        <% end %>
-                      </li>
-                    <% end %>
-                  </ul>
-                </div>
+  <div class="section-groups">
+    <% @days_of_week.each do |day| %>
+      <div class="day-box">
+        <h2><%= day %></h2>
+        <div class="groups">
+          <% if @section_groups_by_day[day].present? %>
+            <% @section_groups_by_day[day].each do |group| %>
+              <div class="section-group">
+                <p><strong>Piloto:</strong> <%= group.user.name %></p>
+                <p><strong>Hora inicio:</strong> <%= group.h_start %></p>
+                <p><strong>Hora fin:</strong> <%= group.h_end %></p>
+                <p><strong>Fecha de viaje:</strong> <%= group.travel_date.strftime('%d/%m/%Y') if group.travel_date %></p>
+                <p><strong>Asientos disponibles:</strong> <%= group.users.count %> / <%= group.n_seats %></p>
+                <p><strong>Costo:</strong> <%= number_to_currency(group.cost, unit: '$', delimiter: '.') %></p>
+                <p><strong>Descripción:</strong> <%= group.description.presence || 'Sin descripción' %></p>
+                <% if group.users.include?(current_user) %>
+                  <p>Ya estás unido a este viaje.</p>
+                <% elsif group.users.count >= group.n_seats.to_i %>
+                  <p>Este viaje está lleno.</p>
+                <% else %>
+                  <%= form_with url: join_group_path(group), method: :post, local: true do %>
+                    <%= hidden_field_tag :mode, @mode %>
+                    <%= submit_tag 'Unirse al viaje', class: 'btn btn-primary' %>
+                  <% end %>
+                <% end %>
               </div>
             <% end %>
+          <% else %>
+            <p style="text-align: center; color: #6c757d;">No hay viajes disponibles para este día.</p>
           <% end %>
-          <h5><%= itinerary.starting_place.name %> -- <%= itinerary.ending_place.name %></h5>
         </div>
       </div>
     <% end %>
